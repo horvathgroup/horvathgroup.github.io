@@ -418,6 +418,47 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
 .note-card:not(.open) .bullets li[contenteditable="true"]{display:block}
 .note-foot{display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
 .btn.sm{padding:4px 8px;font-size:12px}
+
+/* ---------- human resource ---------- */
+.stats .stat .v.good{color:var(--good)} .stats .stat .v.avg{color:var(--warn)} .stats .stat .v.bad{color:var(--bad)}
+.streak-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.streak-col{border:1px solid var(--line);border-radius:12px;background:var(--surface-2);padding:14px 16px;min-width:0}
+.streak-col h3{margin:0 0 8px;font-family:var(--display);font-weight:500;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.streak-col h3 i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.sc-good h3 i{background:var(--good)} .sc-avg h3 i{background:var(--warn)} .sc-bad h3 i{background:var(--bad)}
+.streak-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-top:1px dashed var(--line);font-size:13px}
+.streak-row:first-of-type{border-top:0}
+.streak-row b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wk{font-family:var(--mono);font-size:11.5px;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.sc-good .wk{background:var(--good-soft);color:var(--good)} .sc-avg .wk{background:var(--warn-soft);color:var(--warn)} .sc-bad .wk{background:var(--bad-soft);color:var(--bad)}
+.wk.hot{outline:1.5px solid currentColor}
+.flag{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-left:6px}
+.sc-good .flag{color:var(--good)} .sc-bad .flag{color:var(--bad)}
+.perf-wrap{overflow:auto;max-height:calc(100vh - 160px);margin-top:12px;border-top:1px solid var(--line)}
+.perf,.hire{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+.perf{min-width:980px}.hire{min-width:760px}
+.perf th,.hire th{position:sticky;top:0;z-index:1;background:#3E4A3F;color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:9px 10px;text-align:center;white-space:nowrap}
+.hire th{background:#2F5D46}
+.perf td,.hire td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:6px 10px;text-align:center;height:34px;background:var(--surface)}
+.perf td.emp,.hire td.nm{font-weight:600}
+.perf td.emp{text-align:left;white-space:nowrap}
+.perf td[contenteditable="true"],.hire td[contenteditable="true"]{outline:2px solid var(--accent);outline-offset:-2px;background:var(--surface)}
+.perf tbody tr:hover td,.hire tbody tr:hover td{background:var(--surface-2)}
+.perf .x,.hire .x{width:1%;border-right:0}
+.streak-tag{font-family:var(--mono);font-size:10.5px;margin-left:6px;padding:1px 6px;border-radius:99px;font-weight:500}
+.rt-good .streak-tag{background:var(--good-soft);color:var(--good)} .rt-average .streak-tag{background:var(--warn-soft);color:var(--warn)} .rt-bad .streak-tag{background:var(--bad-soft);color:var(--bad)}
+.pill-sel{appearance:none;-webkit-appearance:none;border:1px solid transparent;border-radius:99px;padding:4px 26px 4px 12px;font-size:12px;font-weight:600;cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 9px) 50%;background-size:4px 4px;background-repeat:no-repeat;min-width:108px;text-align:center;text-align-last:center}
+.pill-sel option{background:var(--surface);color:var(--ink)}
+.pill-sel.v-{background-color:var(--surface-2);color:var(--ink-3);border-color:var(--line)}
+.pill-sel.v-good,.pill-sel.v-passed{background-color:var(--good-soft);color:var(--good)}
+.pill-sel.v-average,.pill-sel.v-pending{background-color:var(--warn-soft);color:var(--warn)}
+.pill-sel.v-bad,.pill-sel.v-failed{background-color:var(--bad-soft);color:var(--bad)}
+.pill-sel.v-na{background-color:var(--surface-2);color:var(--ink-2);border-color:var(--line)}
+.pill-sel.v-noshow{background-color:var(--gm-bg);color:var(--gm)}
+.pill-sel.v-terminated{background-color:var(--g7p);color:var(--ink)}
+.pill-sel.auto{border-style:dashed;border-color:currentColor}
+.pill-sel.locked{cursor:not-allowed;opacity:.92;border-style:dotted;border-color:currentColor}
+@media (max-width:900px){.streak-cols{grid-template-columns:1fr}}
 .empty-state{padding:26px;text-align:center;color:var(--ink-2)}
 .note{font-size:12px;color:var(--ink-3)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:9px;font-weight:500;z-index:50}
@@ -465,6 +506,8 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
       <a href="#checklist" data-view="checklist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 12.5l2.7 2.7L16.5 9"/></svg>Shift Checklist</a>
       <a href="#fans-new" data-view="fans"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Fan Count</a>
       <div class="subnav"><a href="#fans-new" data-view="fans-new">New Subs</a><a href="#fans-total" data-view="fans-total">Total Subs</a></div>
+      <a href="#hr-perf" data-view="hr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6.5" width="17" height="13" rx="2"/><path d="M9 6.5V5a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0115 5v1.5M3.5 12h17M11 12v2h2v-2"/></svg>Human Resource</a>
+      <div class="subnav"><a href="#hr-hire" data-view="hr-hire">Hiring &amp; Firing</a><a href="#hr-perf" data-view="hr-perf">Performance Evaluation</a></div>
     </nav></div>
     <div class="side-foot">
       <span class="lbl">London · UK time</span>
@@ -559,6 +602,41 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
         </table>
       </div>
       <p class="note">Ticks are saved for each day and shift. The task list is shared by every shift, so double-click a task to rename it, or paste a list of tasks under the last row to add them all.</p>
+    </section>
+
+    <!-- HR: PERFORMANCE -->
+    <section class="view wide" id="v-perf" hidden>
+      <div class="head">
+        <div><div class="eyebrow">Human Resource</div><h1>Performance Evaluation</h1></div>
+        <div class="toolbar">
+          <div class="seg"><button class="btn" id="pw-prev" aria-label="Previous week">←</button><span class="btn month" id="pw-label"></span><button class="btn" id="pw-next" aria-label="Next week">→</button><button class="btn" id="pw-this">This week</button></div>
+        </div>
+      </div>
+      <div class="stats" id="perf-stats"></div>
+      <div class="panel">
+        <div class="panel-head"><div><div class="eyebrow">Consecutive ratings</div><h2 style="margin-top:4px">Streaks up to this week</h2></div><span class="note">Counted week by week while the chatter keeps the same rating</span></div>
+        <div class="streak-cols" id="perf-streaks"></div>
+      </div>
+      <div class="panel" style="padding:0;overflow:hidden">
+        <div class="panel-head" style="padding:16px 20px 0"><div><div class="eyebrow">Scorecard</div><h2 style="margin-top:4px" id="perf-week-title"></h2></div>
+          <div class="toolbar"><button class="btn" id="perf-copy">Start from last week's names</button><button class="btn" id="perf-add">+ Add row</button><button class="btn danger" id="perf-clear">Clear week</button></div></div>
+        <div class="perf-wrap"><table class="perf" id="perf-table"></table></div>
+      </div>
+      <p class="note">Paste straight from your scorecard sheet: click the first cell and press Ctrl+V. Rating fills in from the score when left on Auto (4–5 Good, 3 Average, 0–2 Bad).</p>
+    </section>
+
+    <!-- HR: HIRING & FIRING -->
+    <section class="view" id="v-hire" hidden>
+      <div class="head">
+        <div><div class="eyebrow">Human Resource</div><h1>Hiring &amp; Firing</h1></div>
+        <div class="toolbar">
+          <div class="seg"><button class="btn" id="hm-prev" aria-label="Previous month">←</button><span class="btn month" id="hm-label"></span><button class="btn" id="hm-next" aria-label="Next month">→</button></div>
+          <button class="btn primary" id="hire-add">+ Add applicant</button>
+        </div>
+      </div>
+      <div class="stats" id="hire-stats"></div>
+      <div class="tbl-wrap"><table class="hire" id="hire-table"></table></div>
+      <p class="note">Rules apply automatically: a Failed step fails every later step and the outcome. A Terminated outcome sets every step to N/A. Locked cells are marked with a dotted outline.</p>
     </section>
 
     <!-- DATA IMPORT -->
@@ -657,12 +735,13 @@ function allTitles(){const t=new Set();DAYS.forEach(d=>(S.days[d.k]||[]).forEach
 /* ---------- routing ---------- */
 function route(){
   const v=(location.hash||"#home").slice(1);
-  const view=["home","lineup","chatters","checklist","data","fans-new","fans-total"].includes(v)?v:"home";
-  const sec=view.startsWith("fans")?"fans":view;
+  const view=["home","lineup","chatters","checklist","fans-new","fans-total","hr-hire","hr-perf","data"].includes(v)?v:"home";
+  const sec=view.startsWith("fans")?"fans":view==="hr-hire"?"hire":view==="hr-perf"?"perf":view;
   document.querySelectorAll(".view").forEach(s=>s.hidden=s.id!=="v-"+sec);
-  document.querySelectorAll(".nav a").forEach(a=>{if(a.dataset.view===view||(a.dataset.view==="fans"&&sec==="fans"))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  document.querySelectorAll(".nav a").forEach(a=>{if(a.dataset.view===view||(a.dataset.view==="fans"&&sec==="fans")||(a.dataset.view==="hr"&&(sec==="hire"||sec==="perf")))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   gClear();
   if(sec==="fans"){const k=view==="fans-total"?"total":"new";if(k!==S.fanKind){S.fanKind=k;subFans()}renderFans()}
+  if(sec==="perf")renderPerf();if(sec==="hire")renderHire();
   window.scrollTo(0,0);
 }
 addEventListener("hashchange",route);
@@ -1276,6 +1355,173 @@ function ChecklistAdapter(){
     edit:(el,i)=>ckEdit(el,i)};
 }
 
+
+/* ---------- HUMAN RESOURCE ---------- */
+const PERF_COLS=["Rank","Employee","Group","Sales","Golden Ratio","Unlock Rate","Response Time","Fans/Hour","Score","Rating"];
+const PC={emp:1,group:2,sales:3,score:8,rating:9};
+const RATINGS=["Good","Average","Bad"];
+const STEP_OPTS=["Passed","Failed","Pending","N/A"],OUT_OPTS=["Passed","Failed","No Show","Terminated","Pending"];
+S.perf={};S.perfLoaded=false;S.perfWeek=null;S.hire=[];S.hireLoaded=false;S.hireMonth=ukParts().date.slice(0,7);
+const vcls=v=>"v-"+String(v||"").toLowerCase().replace(/[^a-z]/g,"");
+const pick=(list,v)=>list.find(o=>o.toLowerCase().replace(/[^a-z]/g,"")===String(v||"").toLowerCase().replace(/[^a-z]/g,""));
+function mondayOfISO(iso){const d=new Date(iso+"T12:00:00Z");return addDays(iso,-((d.getUTCDay()+6)%7))}
+function scoreOutOf5(sc){const m=String(sc||"").match(/(\d+(?:\.\d+)?)\s*(?:\/\s*(\d+(?:\.\d+)?))?/);if(!m)return null;const v=+m[1],d=m[2]?+m[2]:5;return d?v/d*5:null}
+function autoRating(sc){const n=scoreOutOf5(sc);if(n==null)return"";return n>=4?"Good":n>=3?"Average":"Bad"}
+function effRating(c){return pick(RATINGS,c[PC.rating])||autoRating(c[PC.score])}
+function perfRows(w){return (S.perf[w]||[]).map(r=>r.slice())}
+/* generic inline text editor for the HR tables */
+function textEdit(el,cur,initial,commit){
+  if(S.readOnly||S.tEditing)return;S.tEditing=true;
+  el.textContent=initial!=null?initial:cur;el.contentEditable="true";el.focus();
+  const rg=document.createRange();rg.selectNodeContents(el);if(initial!=null)rg.collapse(false);const sl=getSelection();sl.removeAllRanges();sl.addRange(rg);
+  let done=false;
+  const finish=(save,dr,dc)=>{if(done)return;done=true;el.contentEditable="false";S.tEditing=false;const v=el.textContent.replace(/\s+/g," ").trim();commit(save&&v!==cur?v:null,dr,dc)};
+  el.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();finish(true,1,0)}else if(e.key==="Tab"){e.preventDefault();finish(true,0,e.shiftKey?-1:1)}else if(e.key==="Escape"){e.preventDefault();finish(false)}});
+  el.addEventListener("blur",()=>finish(true),{once:true});
+}
+function afterEdit(tid,r,c,dr,dc,render){render();if(dr||dc){const ad=adapter(tid);const nr=Math.min(r+(dr||0),Math.max(0,ad.rows()-1)),nc=Math.max(0,Math.min(ad.cols()-1,c+(dc||0)));gSet(tid,{r:nr,c:nc})}gPaint()}
+
+/* ---- performance (weekly) ---- */
+let unPerf=null;
+function subPerf(){
+  if(!S.db)return;if(!S.perfWeek)S.perfWeek=mondayOfISO(ukParts().date);if(unPerf)unPerf();S.perfLoaded=false;
+  const w=S.perfWeek;
+  unPerf=S.db.collection("perf").where("week",">=",addDays(w,-7*26)).where("week","<=",w).onSnapshot(sn=>guard("perf",()=>{
+    if(w!==S.perfWeek)return;const m={};sn.docs.forEach(d=>{const x=d.data();m[d.id]=(x.rows||[]).map(r=>{let c=((r&&r.c)||[]).slice();if(!x.v&&c.length===9)c.splice(PC.group,0,"");return PERF_COLS.map((_,i)=>c[i]==null?"":String(c[i]))});existing.add("perf/"+d.id)});
+    S.perf=m;S.perfLoaded=true;if(!S.tEditing){renderPerf();gPaint()}
+  }),()=>{});
+}
+function savePerf(rows){
+  const w=S.perfWeek;S.perf[w]=rows;if(!S.db)return;
+  queue("perf",()=>S.db.doc("perf/"+w).set({week:w,v:2,rows:rows.map(c=>({c:c.slice()}))}));
+}
+function streakOf(name,w){
+  const k=norm(name);const row=(S.perf[w]||[]).find(c=>norm(c[1])===k);if(!row)return null;
+  const r=effRating(row);if(!r)return null;let n=1,x=addDays(w,-7);
+  while(true){const p=(S.perf[x]||[]).find(c=>norm(c[1])===k);if(!p||effRating(p)!==r)break;n++;x=addDays(x,-7)}
+  return {rating:r,weeks:n};
+}
+function renderPerf(){
+  const t=$("#perf-table");if(!t||S.tEditing)return;
+  if(!S.perfWeek)S.perfWeek=mondayOfISO(ukParts().date);
+  const w=S.perfWeek,end=addDays(w,6),thisW=mondayOfISO(ukParts().date);
+  $("#pw-label").textContent=fmt(w,{day:"numeric",month:"short"})+" – "+fmt(end,{day:"numeric",month:"short",year:"numeric"});
+  $("#pw-this").disabled=w===thisW;
+  $("#perf-week-title").textContent=(w===thisW?"This week · ":"Week of ")+fmt(w,{weekday:"short",day:"numeric",month:"long"})+" to "+fmt(end,{weekday:"short",day:"numeric",month:"long"});
+  ["#perf-add","#perf-copy","#perf-clear"].forEach(q=>$(q).disabled=S.readOnly);
+  if(!S.perfLoaded&&S.db){t.innerHTML=`<tbody><tr><td class="empty-state">Loading…</td></tr></tbody>`;$("#perf-streaks").innerHTML="";$("#perf-stats").innerHTML="";return}
+  const rows=perfRows(w);
+  // stats
+  const named=rows.filter(c=>c[1].trim()),cnt={Good:0,Average:0,Bad:0};named.forEach(c=>{const r=effRating(c);if(cnt[r]!=null)cnt[r]++});
+  const sales=named.map(c=>Number(String(c[PC.sales]).replace(/[^0-9.\-]/g,""))).filter(x=>!isNaN(x)&&x!==0);
+  const sc=named.map(c=>scoreOutOf5(c[PC.score])).filter(x=>x!=null);
+  $("#perf-stats").innerHTML=`<div class="stat"><span class="l">Chatters evaluated</span><span class="v">${named.length}</span><span class="l">${sc.length?"Avg score "+(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1)+" / 5":"No scores yet"}</span></div>
+    <div class="stat"><span class="l">Good</span><span class="v good">${cnt.Good}</span><span class="l">${named.length?Math.round(cnt.Good/named.length*100)+"% of team":"—"}</span></div>
+    <div class="stat"><span class="l">Average</span><span class="v avg">${cnt.Average}</span><span class="l">${named.length?Math.round(cnt.Average/named.length*100)+"% of team":"—"}</span></div>
+    <div class="stat"><span class="l">Bad</span><span class="v bad">${cnt.Bad}</span><span class="l">${sales.length?"Team sales "+money(sales.reduce((a,b)=>a+b,0)):"—"}</span></div>`;
+  // streak dashboard
+  const groups={Good:[],Average:[],Bad:[]};
+  named.forEach(c=>{const s=streakOf(c[1],w);if(s&&groups[s.rating])groups[s.rating].push({name:c[1].trim(),weeks:s.weeks})});
+  const col=(r,cls,title,flagFn)=>{const L=groups[r].sort((a,b)=>b.weeks-a.weeks||a.name.localeCompare(b.name));
+    return `<div class="streak-col ${cls}"><h3><i></i>${title}<span class="note" style="margin-left:auto;text-transform:none;letter-spacing:0">${L.length}</span></h3>${L.length?L.map(x=>`<div class="streak-row"><b>${esc(x.name)}${flagFn(x.weeks)}</b><span class="wk${x.weeks>=4?" hot":""}">${x.weeks} wk${x.weeks===1?"":"s"}</span></div>`).join(""):`<div class="note">Nobody this week</div>`}</div>`};
+  $("#perf-streaks").innerHTML=col("Good","sc-good","Good",n=>n>=4?`<span class="flag">${n}+ in a row</span>`:"")+col("Average","sc-avg","Average",()=>"")+col("Bad","sc-bad","Bad",n=>n>=2?`<span class="flag">Needs attention</span>`:"");
+  // table
+  let h=`<thead><tr>${PERF_COLS.map(x=>`<th>${x}</th>`).join("")}<th class="x"></th></tr></thead><tbody>`;
+  h+=rows.map((c,r)=>{const er=effRating(c),explicit=pick(RATINGS,c[PC.rating]),auto=autoRating(c[PC.score]),s=c[1].trim()?streakOf(c[1],w):null;
+    return `<tr class="rt-${er.toLowerCase()}">${PERF_COLS.map((_,i)=>{
+      if(i===PC.rating)return `<td data-gt="perf" data-r="${r}" data-c="${PC.rating}"><select class="pill-sel ${vcls(er)}${explicit?"":" auto"}" data-prate="${r}" aria-label="Rating"${S.readOnly?" disabled":""}><option value="">${auto?"Auto · "+auto:"Auto"}</option>${RATINGS.map(o=>`<option${o===explicit?" selected":""}>${o}</option>`).join("")}</select></td>`;
+      if(i===1)return `<td class="emp" data-gt="perf" data-r="${r}" data-c="1">${esc(c[1])}${s&&s.weeks>=2?`<span class="streak-tag">${s.weeks}w</span>`:""}</td>`;
+      return `<td data-gt="perf" data-r="${r}" data-c="${i}">${esc(c[i])}</td>`}).join("")}
+      <td class="x">${S.readOnly?"":`<button class="mini" data-pdel="${r}" title="Remove row">✕</button>`}</td></tr>`}).join("");
+  if(!rows.length)h+=`<tr><td colspan="11" class="empty-state">No scorecard for this week yet. Click <b>+ Add row</b> and paste your sheet, or use <b>Start from last week's names</b>.</td></tr>`;
+  t.innerHTML=h+"</tbody>";
+}
+function PerfAdapter(){
+  return {rows:()=>perfRows(S.perfWeek).length,cols:()=>PERF_COLS.length,
+    get(r,c){const row=perfRows(S.perfWeek)[r];if(!row)return"";return c===PC.rating?effRating(row):row[c]},
+    set(ch){const rows=perfRows(S.perfWeek);let n=0;
+      ch.forEach(({r,c,v})=>{if(c>PC.rating)return;v=String(v).trim();while(rows.length<=r){if(!v)return;rows.push(PERF_COLS.map(()=>""))}
+        rows[r][c]=c===PC.rating?(pick(RATINGS,v)||""):v;n++});
+      if(n)savePerf(rows);renderPerf()},
+    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c;if(c===PC.rating){const s=el.querySelector("select");if(s){s.focus();try{s.showPicker()}catch(e){}}return}
+      const cur=perfRows(S.perfWeek)[r]?.[c]||"";
+      textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null){const rows=perfRows(S.perfWeek);if(rows[r]){rows[r][c]=v;savePerf(rows)}}afterEdit("perf",r,c,dr,dc,renderPerf)})}};
+}
+$("#perf-table").addEventListener("dblclick",e=>{const td=e.target.closest('[data-gt="perf"]');if(td&&!e.target.closest("select"))PerfAdapter().edit(td)});
+$("#perf-table").addEventListener("change",e=>{const s=e.target.closest("[data-prate]");if(!s)return;const rows=perfRows(S.perfWeek),r=+s.dataset.prate;if(rows[r]){rows[r][PC.rating]=s.value;savePerf(rows);renderPerf();gPaint()}});
+$("#perf-table").addEventListener("click",e=>{const b=e.target.closest("[data-pdel]");if(!b||S.readOnly)return;
+  if(!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Remove?";setTimeout(()=>{if(b.isConnected){b.classList.remove("armed");b.textContent="✕"}},3000);return}
+  const rows=perfRows(S.perfWeek);rows.splice(+b.dataset.pdel,1);savePerf(rows);gClear();renderPerf()});
+$("#perf-add").onclick=()=>{const rows=perfRows(S.perfWeek);rows.push(PERF_COLS.map((_,i)=>i===0?String(rows.length+1):""));savePerf(rows);renderPerf();const r=rows.length-1;gSet("perf",{r,c:1});gPaint();const el=gCell("perf",r,1);if(el)PerfAdapter().edit(el)};
+$("#perf-copy").onclick=()=>{const prev=perfRows(addDays(S.perfWeek,-7)).filter(c=>c[1].trim());if(!prev.length){toast("Last week has no names to copy");return}
+  const rows=perfRows(S.perfWeek),have=new Set(rows.map(c=>norm(c[1])));let n=0;prev.forEach(c=>{if(!have.has(norm(c[1]))){rows.push(PERF_COLS.map((_,i)=>i===PC.emp||i===PC.group?c[i]:""));n++}});
+  rows.forEach((c,i)=>{if(!c[0])c[0]=String(i+1)});savePerf(rows);renderPerf();toast(n?`Added ${n} name${n===1?"":"s"} from last week`:"Everyone from last week is already here")};
+$("#perf-clear").onclick=e=>{const b=e.currentTarget;if(!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Click again to clear";setTimeout(()=>{b.classList.remove("armed");b.textContent="Clear week"},3000);return}
+  b.classList.remove("armed");b.textContent="Clear week";savePerf([]);gClear();renderPerf();toast("Week cleared")};
+const pwGo=w=>{S.perfWeek=w;gClear();subPerf();renderPerf()};
+$("#pw-prev").onclick=()=>pwGo(addDays(S.perfWeek,-7));$("#pw-next").onclick=()=>pwGo(addDays(S.perfWeek,7));$("#pw-this").onclick=()=>pwGo(mondayOfISO(ukParts().date));
+
+/* ---- hiring & firing (monthly) ---- */
+const HKEYS=["name","date","a","i","o","out"];
+let unHire=null;
+function subHire(){
+  if(!S.db)return;if(unHire)unHire();S.hireLoaded=false;const m=S.hireMonth;
+  unHire=S.db.doc("hire/"+m).onSnapshot(sn=>guard("hire",()=>{if(m!==S.hireMonth)return;if(sn.exists)existing.add("hire/"+m);
+    S.hire=((sn.exists&&sn.data().rows)||[]).map(r=>Object.fromEntries(HKEYS.map(k=>[k,r&&r[k]!=null?String(r[k]):""])));S.hireLoaded=true;if(!S.tEditing){renderHire();gPaint()}}),()=>{});
+}
+function saveHire(rows){const m=S.hireMonth;S.hire=rows;if(!S.db)return;queue("hire",()=>S.db.doc("hire/"+m).set({month:m,rows:rows.map(r=>({...r}))}))}
+function hireEff(r){ // apply the rules; returns {row, locked:Set}
+  const e={...r},locked=new Set();
+  if(pick(OUT_OPTS,r.out)==="Terminated"){["a","i","o"].forEach(k=>{e[k]="N/A";locked.add(k)});if(!e.date)e.date="N/A";return {e,locked}}
+  const steps=["a","i","o"],f=steps.findIndex(k=>pick(STEP_OPTS,r[k])==="Failed");
+  if(f>=0){steps.slice(f+1).forEach(k=>{e[k]="Failed";locked.add(k)});e.out="Failed";locked.add("out")}
+  return {e,locked};
+}
+function renderHire(){
+  const t=$("#hire-table");if(!t||S.tEditing)return;
+  const [y,mo]=S.hireMonth.split("-").map(Number);$("#hm-label").textContent=MONTHS[mo-1]+" "+y;$("#hire-add").disabled=S.readOnly;
+  if(!S.hireLoaded&&S.db){t.innerHTML=`<tbody><tr><td class="empty-state">Loading…</td></tr></tbody>`;$("#hire-stats").innerHTML="";return}
+  const rows=S.hire,effs=rows.map(hireEff),named=effs.filter(x=>x.e.name.trim());
+  const c=k=>named.filter(x=>pick(OUT_OPTS,x.e.out)===k).length;
+  $("#hire-stats").innerHTML=`<div class="stat"><span class="l">Applicants this month</span><span class="v">${named.filter(x=>pick(OUT_OPTS,x.e.out)!=="Terminated").length}</span><span class="l">${c("Pending")+named.filter(x=>!x.e.out).length} still in progress</span></div>
+    <div class="stat"><span class="l">Hired (passed)</span><span class="v good">${c("Passed")}</span><span class="l">all steps cleared</span></div>
+    <div class="stat"><span class="l">Failed / no show</span><span class="v bad">${c("Failed")+c("No Show")}</span><span class="l">${c("Failed")} failed · ${c("No Show")} no show</span></div>
+    <div class="stat"><span class="l">Terminated</span><span class="v">${c("Terminated")}</span><span class="l">existing chatters let go</span></div>`;
+  const sel=(r,k,opts,val,locked)=>{const v=pick(opts,val)||(locked?val:"");return `<select class="pill-sel ${vcls(v==="N/A"?"na":v)}${locked?" locked":""}" data-hrow="${r}" data-hkey="${k}"${locked||S.readOnly?" disabled":""} title="${locked?"Set automatically by the rules":""}"><option value="">—</option>${opts.map(o=>`<option${o===v?" selected":""}>${o}</option>`).join("")}</select>`};
+  let h=`<thead><tr><th>Applicant / Chatter</th><th>Date</th><th>Assessment</th><th>Interview</th><th>Onboarding</th><th>Outcome</th><th class="x"></th></tr></thead><tbody>`;
+  h+=effs.map(({e,locked},r)=>`<tr><td class="nm" data-gt="hire" data-r="${r}" data-c="0">${esc(e.name)}</td><td data-gt="hire" data-r="${r}" data-c="1">${esc(e.date)}</td>
+    ${["a","i","o"].map((k,j)=>`<td data-gt="hire" data-r="${r}" data-c="${j+2}">${sel(r,k,STEP_OPTS,e[k],locked.has(k))}</td>`).join("")}
+    <td data-gt="hire" data-r="${r}" data-c="5">${sel(r,"out",OUT_OPTS,e.out,locked.has("out"))}</td>
+    <td class="x">${S.readOnly?"":`<button class="mini" data-hdel="${r}" title="Remove row">✕</button>`}</td></tr>`).join("");
+  if(!rows.length)h+=`<tr><td colspan="7" class="empty-state">No applicants for ${MONTHS[mo-1]} yet. Click <b>+ Add applicant</b>, or select a cell and paste from your sheet.</td></tr>`;
+  t.innerHTML=h+"</tbody>";
+}
+function HireAdapter(){
+  return {rows:()=>S.hire.length,cols:()=>6,
+    get(r,c){const row=S.hire[r];if(!row)return"";return hireEff(row).e[HKEYS[c]]||""},
+    set(ch){const rows=S.hire.map(x=>({...x}));let n=0,bad=0;
+      ch.forEach(({r,c,v})=>{if(c>5)return;v=String(v).trim();const k=HKEYS[c];
+        let val=v;if(c>=2&&v){val=pick(c===5?OUT_OPTS:STEP_OPTS,v);if(!val){bad++;return}}
+        while(rows.length<=r){if(!v)return;rows.push(Object.fromEntries(HKEYS.map(x=>[x,""])))}
+        if(c>=2&&hireEff(rows[r]).locked.has(k))return;rows[r][k]=val;n++});
+      if(bad)toast(`Skipped ${bad} value${bad===1?"":"s"} that aren't dropdown options`);
+      if(n)saveHire(rows);renderHire()},
+    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c;if(c>=2){const s=el.querySelector("select:not([disabled])");if(s){s.focus();try{s.showPicker()}catch(e){}}return}
+      const k=HKEYS[c],cur=S.hire[r]?.[k]||"";
+      textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null&&S.hire[r]){const rows=S.hire.map(x=>({...x}));rows[r][k]=v;saveHire(rows)}afterEdit("hire",r,c,dr,dc,renderHire)})}};
+}
+$("#hire-table").addEventListener("dblclick",e=>{const td=e.target.closest('[data-gt="hire"]');if(td&&!e.target.closest("select"))HireAdapter().edit(td)});
+$("#hire-table").addEventListener("change",e=>{const s=e.target.closest("[data-hkey]");if(!s)return;const rows=S.hire.map(x=>({...x})),r=+s.dataset.hrow;if(!rows[r])return;
+  rows[r][s.dataset.hkey]=s.value;
+  if(s.dataset.hkey==="out"&&s.value!=="Terminated"&&rows[r].date==="N/A")rows[r].date="";
+  saveHire(rows);renderHire();gPaint()});
+$("#hire-table").addEventListener("click",e=>{const b=e.target.closest("[data-hdel]");if(!b||S.readOnly)return;
+  if(!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Remove?";setTimeout(()=>{if(b.isConnected){b.classList.remove("armed");b.textContent="✕"}},3000);return}
+  const rows=S.hire.map(x=>({...x}));rows.splice(+b.dataset.hdel,1);saveHire(rows);gClear();renderHire()});
+$("#hire-add").onclick=()=>{const rows=S.hire.map(x=>({...x}));rows.push(Object.fromEntries(HKEYS.map(k=>[k,""])));saveHire(rows);renderHire();const r=rows.length-1;gSet("hire",{r,c:0});gPaint();const el=gCell("hire",r,0);if(el)HireAdapter().edit(el)};
+const hmGo=n=>{S.hireMonth=shiftMonth(S.hireMonth,n);gClear();subHire();renderHire()};
+$("#hm-prev").onclick=()=>hmGo(-1);$("#hm-next").onclick=()=>hmGo(1);
+
 /* ---------- adapters: how each table reads/writes cells ---------- */
 function FanAdapter(){
   const nd=monthDays(S.fanMonth);
@@ -1342,6 +1588,8 @@ function RosterAdapter(){
 function adapter(tid){
   if(!tid)return null;
   if(tid==="fan")return FanAdapter();
+  if(tid==="perf")return PerfAdapter();
+  if(tid==="hire")return HireAdapter();
   if(tid==="chk")return ChecklistAdapter();
   if(tid==="sales")return SalesAdapter();
   if(tid==="notes")return NotesAdapter();
@@ -1358,7 +1606,7 @@ function gBox(rg){return {r1:Math.min(rg.a.r,rg.f.r),r2:Math.max(rg.a.r,rg.f.r),
 function gPos(el){return {r:+el.dataset.r,c:+el.dataset.c}}
 function gSet(tid,p){G.tid=tid;G.ranges=[{a:p,f:p}];G.anchor=p}
 function gClear(){G.tid=null;G.ranges=[];G.anchor=null;gPaint()}
-function gEditing(){const a=document.activeElement;return !!(a&&(a.isContentEditable||/^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName)))||S.editing||S.cEditing||S.fEditing||S.sEditing||S.kEditing||S.nEditing}
+function gEditing(){const a=document.activeElement;return !!(a&&(a.isContentEditable||/^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName)))||S.editing||S.cEditing||S.fEditing||S.sEditing||S.kEditing||S.nEditing||S.tEditing}
 function gSelectedPositions(){ // unique [r,c] across ranges, rows expanded for merged cells
   const seen=new Set(),out=[];
   G.ranges.forEach(rg=>{const b=gBox(rg);for(let r=b.r1;r<=b.r2;r++)for(let c=b.c1;c<=b.c2;c++){const k=r+","+c;if(!seen.has(k)){seen.add(k);out.push({r,c})}}});
@@ -1409,7 +1657,7 @@ document.addEventListener("mouseup",()=>{
   setTimeout(()=>{if(gEditing())return;const ad=adapter(d.tid),el=gCell(d.tid,d.p.r,d.p.c);if(ad&&el)ad.edit(el)},0);
 });
 document.addEventListener("keydown",e=>{
-  if(!G.tid||gEditing()||document.querySelector("dialog[open]"))return;
+  if(e.defaultPrevented||!G.tid||gEditing()||document.querySelector("dialog[open]"))return;
   const ad=adapter(G.tid);if(!ad)return;
   const k=e.key,mod=e.ctrlKey||e.metaKey;
   const last=G.ranges[G.ranges.length-1];
@@ -1465,15 +1713,15 @@ document.addEventListener("paste",e=>{
 });
 
 /* ---------- data ---------- */
-function renderAll(){renderHome();renderLineup();renderChatters();renderChecklist();renderFans();tick();gPaint()}
+function renderAll(){renderHome();renderLineup();renderChatters();renderChecklist();renderFans();renderPerf();renderHire();tick();gPaint()}
 async function boot(){
   S.day=todayKey();S.days[S.day]=S.shifts=[];
   route();tick();renderAll();
   const db=await (window.claude&&window.claude.use?window.claude.use("db"):null);
-  if(!db){S.loaded=S.boardLoaded=S.fanLoaded=S.fanPagesLoaded=S.ckTplLoaded=S.ckLoaded=true;DAYS.forEach(d=>S.loadedDays.add(d.k));renderAll();$("#ch-body").innerHTML=`<tr><td colspan="5" class="empty-state">Team data isn't available in this view.</td></tr>`;return}
+  if(!db){S.loaded=S.boardLoaded=S.fanLoaded=S.fanPagesLoaded=S.ckTplLoaded=S.ckLoaded=S.perfLoaded=S.hireLoaded=true;DAYS.forEach(d=>S.loadedDays.add(d.k));renderAll();$("#ch-body").innerHTML=`<tr><td colspan="5" class="empty-state">Team data isn't available in this view.</td></tr>`;return}
   S.db=db;
   db.doc("fans/pages").onSnapshot(sn=>guard("fanpages",()=>{S.fanPages=(sn.exists&&sn.data().list)||[];S.fanPagesLoaded=true;if(!S.fEditing){renderFans();gPaint()}}),()=>{});
-  subFans();subSales();
+  subFans();subSales();subPerf();subHire();
   db.doc("checklist/template").onSnapshot(sn=>guard("cktpl",()=>{S.ckItems=(sn.exists&&sn.data().items)||[];S.ckTplLoaded=true;if(!S.kEditing){renderChecklist();gPaint()}}),()=>{});
   subChecks();
   db.collection("chatters").onSnapshot(sn=>{S.chatters=new Map(sn.docs.map(d=>[d.id,d.data()]));S.loaded=true;renderAll()},()=>{});
