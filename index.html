@@ -117,7 +117,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 .app{display:grid;grid-template-columns:256px 1fr;min-height:100%}
-.side{background:var(--side);color:var(--side-ink);padding:26px 16px 22px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh}
+.side{background:var(--side);color:var(--side-ink);padding:26px 16px 22px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:thin}
 /* brand lockup */
 .brand{display:flex;align-items:center;gap:14px;padding:4px 8px 22px;border-bottom:1px solid var(--side-line);text-decoration:none;color:inherit}
 .emblem{width:46px;height:46px;flex:none;color:#FFFFFF;display:block}
@@ -459,6 +459,110 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
 .pill-sel.auto{border-style:dashed;border-color:currentColor}
 .pill-sel.locked{cursor:not-allowed;opacity:.92;border-style:dotted;border-color:currentColor}
 @media (max-width:900px){.streak-cols{grid-template-columns:1fr}}
+
+/* ---------- development tracking ---------- */
+.dev-wrap{overflow:auto;max-height:calc(100vh - 150px);border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow)}
+.devt{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.devt th,.devt td{height:30px;padding:0 10px;white-space:nowrap;text-align:right;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:92px}
+.devt thead th{position:sticky;top:0;z-index:3;background:var(--sheet-head);color:var(--sheet-head-ink);font-weight:600;text-align:center;font-size:12px;letter-spacing:.02em;border-right-color:rgba(255,255,255,.12)}
+.devt .d{position:sticky;left:0;z-index:2;background:var(--surface);text-align:left;font-weight:600;min-width:118px}
+.devt thead th.d{z-index:4;background:var(--sheet-head);text-align:left}
+.devt .d small{font-weight:400;color:var(--ink-3);margin-left:6px}
+.devt tbody tr.today .d{box-shadow:inset 3px 0 0 var(--accent)}
+.devt tbody tr.wkend td{background:var(--surface-2)}
+.devt td.v{cursor:cell}
+.devt td.dt{background:var(--peach-2);font-weight:700}
+.devt td[contenteditable="true"],.devt th[contenteditable="true"]{outline:2px solid var(--accent);outline-offset:-2px;background:var(--surface);color:var(--ink);cursor:text}
+.devt tfoot td{font-weight:700}
+.devt tfoot tr.lm td{background:var(--gm-bg);color:var(--ink);font-weight:500}
+.devt tfoot tr.lm .d{background:var(--gm-bg);font-weight:600}
+.devt tfoot tr.lm td.need{color:var(--ink-3);font-style:italic;font-weight:400;cursor:cell}
+.devt tfoot tr.st td{position:sticky;z-index:2;background:var(--side);color:#fff;border-right-color:rgba(255,255,255,.1);border-bottom-color:rgba(255,255,255,.1)}
+.devt tfoot tr.st .d{z-index:3;background:var(--side);color:#fff;letter-spacing:.06em;font-size:11px;text-transform:uppercase}
+.devt tfoot tr.st.s3 td{bottom:60px} .devt tfoot tr.st.s2 td{bottom:30px} .devt tfoot tr.st.s1 td{bottom:0}
+.devt tfoot tr.s1 td.pos{background:#1F6B45;color:#fff} .devt tfoot tr.s1 td.neg{background:#9E2B25;color:#fff} .devt tfoot tr.s1 td.cat{background:#9A6A12;color:#fff}
+.devt th .rm{margin-left:6px}
+.dev-add{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:10px 12px}
+.dev-add input{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
+/* business review */
+.rev-hero{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.rev-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rev-col{border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:var(--shadow);overflow:hidden;min-width:0}
+.rev-col header{padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line)}
+.rev-col header h3{margin:0;font-family:var(--display);font-weight:500;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+.rev-col header span{font-family:var(--display);font-weight:300;font-size:28px;line-height:1}
+.rev-col header p{margin:2px 0 0;font-size:11.5px;color:var(--ink-3)}
+.rev-col.crit header{background:var(--bad-soft)} .rev-col.crit h3,.rev-col.crit header span{color:var(--bad)}
+.rev-col.catch header{background:var(--warn-soft)} .rev-col.catch h3,.rev-col.catch header span{color:var(--warn)}
+.rev-col.sus header{background:var(--good-soft)} .rev-col.sus h3,.rev-col.sus header span{color:var(--good)}
+.rev-item{padding:11px 18px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline}
+.rev-item:first-of-type{border-top:0}
+.rev-item b{font-weight:600}
+.rev-item .dl{font-family:var(--mono);font-size:12.5px;font-weight:500}
+.rev-item .sub{grid-column:1/-1;font-size:12px;color:var(--ink-2)}
+.pos-t{color:var(--good)} .neg-t{color:var(--bad)} .cat-t{color:var(--warn)}
+.diffbars{display:flex;flex-direction:column;gap:5px}
+.db-row{display:grid;grid-template-columns:120px 1fr 1fr 84px;align-items:center;gap:8px;font-size:12.5px}
+.db-row .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.db-neg{display:flex;justify-content:flex-end} .db-pos{display:flex;border-left:1px solid var(--ink-3)}
+.db-neg i,.db-pos i{display:block;height:14px;border-radius:3px;min-width:2px}
+.db-neg i{background:var(--bad);border-radius:3px 0 0 3px} .db-neg i.cat{background:var(--warn)} .db-pos i{background:var(--good);border-radius:0 3px 3px 0}
+.db-row .val{font-family:var(--mono);text-align:right;font-size:12px}
+.notes-list{display:flex;flex-direction:column;gap:0;margin:0;padding:0;list-style:none;counter-reset:n}
+.notes-list li{padding:13px 0 13px 38px;border-top:1px solid var(--line);position:relative;line-height:1.55}
+.notes-list li:first-child{border-top:0}
+.notes-list li::before{counter-increment:n;content:counter(n);position:absolute;left:0;top:13px;width:24px;height:24px;border-radius:50%;background:var(--side);color:#fff;font-family:var(--display);font-size:11.5px;display:grid;place-items:center}
+.notes-list b{font-weight:600}
+.tagx{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:99px;margin-right:8px;white-space:nowrap}
+.tagx.risk{background:var(--bad-soft);color:var(--bad)} .tagx.win{background:var(--good-soft);color:var(--good)} .tagx.watch{background:var(--warn-soft);color:var(--warn)} .tagx.info{background:var(--accent-soft);color:var(--accent-ink)}
+/* content request */
+.cr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;align-items:start}
+.cr-card{border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:var(--shadow);overflow:hidden;min-width:0}
+.cr-head{background:var(--side);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cr-title{font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.04em;cursor:text;min-width:60px;border-radius:6px;padding:1px 6px;margin-left:-6px}
+.cr-title[contenteditable="true"]{background:#fff;color:#1E1E1E;outline:2px solid var(--accent)}
+.cr-count{font-size:11.5px;color:#ABA69E;white-space:nowrap}
+.cr-head .mini{background:transparent;color:#ABA69E;border-color:rgba(255,255,255,.2)}
+.cr-head .mini:hover{color:#fff;border-color:#fff}.cr-head .mini.armed{background:var(--bad);border-color:var(--bad);color:#fff}
+.cr-t{border-collapse:collapse;width:100%;font-size:13px}
+.cr-t th{white-space:nowrap;background:var(--surface-2);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600;text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
+.cr-t td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+.cr-t td.rq{cursor:text;word-break:break-word}
+.cr-t td.dtc{width:132px;font-family:var(--mono);font-size:12px;color:var(--ink-2);white-space:nowrap;cursor:text}
+.cr-t td.tk{width:40px;text-align:center;padding-right:0}
+.cr-t td.x{width:1%;padding-left:0}
+.cr-t tr.done td.rq{color:var(--ink-3);text-decoration:line-through}
+.cr-t td[contenteditable="true"]{outline:2px solid var(--accent);outline-offset:-2px;background:var(--surface)}
+.cr-foot{padding:8px 10px}
+@media (max-width:900px){.rev-hero{grid-template-columns:repeat(2,1fr)}.rev-cols{grid-template-columns:1fr}.db-row{grid-template-columns:90px 1fr 1fr 70px}}
+
+/* targets */
+.devt tfoot tr.tg td{background:var(--accent-soft);color:var(--ink);font-weight:600}
+.devt tfoot tr.tg .d{background:var(--accent-soft)}
+.devt tfoot tr.tg td.need{color:var(--ink-3);font-style:italic;font-weight:400;cursor:cell}
+.devt tfoot tr.tg.adm td[data-gt]{cursor:cell}
+.devt .lock{font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-left:8px;border:1px solid var(--line);border-radius:99px;padding:0 6px}
+.devt .lock.ed{color:var(--accent-ink);border-color:var(--accent)}
+.tgt-wrap{overflow-x:auto;margin-top:12px;border-top:1px solid var(--line)}
+.tgt{border-collapse:collapse;width:100%;min-width:900px;font-size:13px;font-variant-numeric:tabular-nums}
+.tgt th{background:var(--sheet-head);color:#fff;font-size:11.5px;font-weight:600;padding:9px 10px;text-align:right;white-space:nowrap;vertical-align:bottom}
+.tgt th small{display:block;font-weight:400;font-size:10px;opacity:.7;letter-spacing:.02em}
+.tgt th.hl{background:var(--accent);color:#fff}
+.tgt td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.tgt .l{text-align:left}.tgt td.nm{font-weight:600}
+.tgt td.inv{color:var(--ink-2)}.tgt .up{font-family:var(--mono);font-size:10.5px;color:var(--accent-ink);background:var(--accent-soft);border-radius:99px;padding:1px 6px;margin-left:4px}
+.tgt td.adm{cursor:text;font-weight:600;box-shadow:inset 0 -1px 0 var(--accent)}
+.tgt td.adm.need{color:var(--ink-3);font-style:italic;font-weight:400}
+.tgt td.adm[contenteditable="true"]{outline:2px solid var(--accent);outline-offset:-2px;background:var(--surface)}
+.tgt td.hl{background:var(--accent-soft);font-size:14px}
+.tgt tfoot td{font-weight:700;background:var(--surface-2);border-bottom:0}
+.tgt tfoot td.hl{background:var(--accent-soft)}
+.tbar{display:inline-block;width:64px;height:7px;border-radius:9px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden;vertical-align:middle}
+.tbar i{display:block;height:100%}.tbar.b-inv i{background:var(--ink)}.tbar.b-adm i{background:var(--accent)}
+.tpct{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin-left:8px}
+.tc-sum{font-family:var(--display);font-weight:400;font-size:20px}
+.ct-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.ct-amt{font-family:var(--display);font-size:16px;font-weight:500;white-space:nowrap}
 .empty-state{padding:26px;text-align:center;color:var(--ink-2)}
 .note{font-size:12px;color:var(--ink-3)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:9px;font-weight:500;z-index:50}
@@ -508,6 +612,9 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
       <div class="subnav"><a href="#fans-new" data-view="fans-new">New Subs</a><a href="#fans-total" data-view="fans-total">Total Subs</a></div>
       <a href="#hr-perf" data-view="hr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6.5" width="17" height="13" rx="2"/><path d="M9 6.5V5a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0115 5v1.5M3.5 12h17M11 12v2h2v-2"/></svg>Human Resource</a>
       <div class="subnav"><a href="#hr-hire" data-view="hr-hire">Hiring &amp; Firing</a><a href="#hr-perf" data-view="hr-perf">Performance Evaluation</a></div>
+      <a href="#dev-table" data-view="dev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 17.5l5.5-6 4 3.5 7.5-8.5"/><path d="M15.5 6.5h5v5"/><path d="M3.5 20.5h17"/></svg>Development Tracking</a>
+      <div class="subnav"><a href="#dev-table" data-view="dev-table">Development Table</a><a href="#dev-review" data-view="dev-review">Business Review</a><a href="#dev-targets" data-view="dev-targets">Business Targets</a></div>
+      <a href="#content" data-view="content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l4.5-4 3.5 3 3-2.5 5 4"/></svg>Content Request</a>
     </nav></div>
     <div class="side-foot">
       <span class="lbl">London · UK time</span>
@@ -639,6 +746,64 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
       <p class="note">Rules apply automatically: a Failed step fails every later step and the outcome. A Terminated outcome sets every step to N/A. Locked cells are marked with a dotted outline.</p>
     </section>
 
+    <!-- DEVELOPMENT TABLE -->
+    <section class="view wide" id="v-devt" hidden>
+      <div class="head">
+        <div><div class="eyebrow">Development Tracking</div><h1>Development Table</h1></div>
+        <div class="toolbar">
+          <div class="seg"><button class="btn" data-devm="-1" aria-label="Previous month">←</button><span class="btn month dev-month"></span><button class="btn" data-devm="1" aria-label="Next month">→</button></div>
+          <button class="btn" id="dev-edit" aria-pressed="false">Edit models</button>
+          <a class="btn" href="#dev-targets">Business Targets</a><a class="btn primary" href="#dev-review">Business Review →</a>
+        </div>
+      </div>
+      <div class="stats" id="dev-stats"></div>
+      <form class="toolbar dev-add" id="dev-add" hidden>
+        <input id="dev-add-names" placeholder="Add models, separated by commas, e.g. Hannah, Sophia, Shae" aria-label="Model names to add" style="flex:1 1 320px">
+        <button class="btn primary" type="submit">Add models</button>
+        <span class="note">Double-click a model's name to rename it. ✕ removes the model and its figures.</span>
+      </form>
+      <div class="dev-wrap"><table class="devt" id="dev-table"></table></div>
+      <p class="note">Click a cell and paste straight from your sheet (Ctrl+V). Average is per day with sales entered. Last month comes from what was entered for that month; if nothing was entered, type last month's total in the “Last month” row. The Inviolable target is last month plus an uplift (20% for pages that made $5,000 or less, 10% for $5,001 to $19,999, 5% for $20,000 and over) and can't be changed. The Admin target is yours to set. Average diff compares this month with the same days of last month plus 5%.</p>
+    </section>
+
+    <!-- BUSINESS REVIEW -->
+    <section class="view" id="v-devr" hidden>
+      <div class="head">
+        <div><div class="eyebrow">Development Tracking</div><h1>Business Review</h1></div>
+        <div class="toolbar">
+          <div class="seg"><button class="btn" data-devm="-1" aria-label="Previous month">←</button><span class="btn month dev-month"></span><button class="btn" data-devm="1" aria-label="Next month">→</button></div>
+          <a class="btn" href="#dev-table">← Development Table</a><a class="btn" href="#dev-targets">Business Targets</a>
+        </div>
+      </div>
+      <div id="dev-review"></div>
+    </section>
+
+    <!-- BUSINESS TARGETS -->
+    <section class="view" id="v-devg" hidden>
+      <div class="head">
+        <div><div class="eyebrow">Development Tracking</div><h1>Business Targets</h1></div>
+        <div class="toolbar">
+          <div class="seg"><button class="btn" data-devm="-1" aria-label="Previous month">←</button><span class="btn month dev-month"></span><button class="btn" data-devm="1" aria-label="Next month">→</button></div>
+          <a class="btn" href="#dev-table">Development Table</a><a class="btn" href="#dev-review">Business Review</a>
+        </div>
+      </div>
+      <div id="dev-targets"></div>
+    </section>
+
+    <!-- CONTENT REQUEST -->
+    <section class="view" id="v-content" hidden>
+      <div class="head">
+        <div><div class="eyebrow">Creators</div><h1>Content Request</h1></div>
+        <div class="toolbar">
+          <select id="cr-filter" class="btn" aria-label="Show"><option value="open">Open requests</option><option value="all">All requests</option></select>
+          <button class="btn primary" id="cr-add">+ Add page table</button>
+        </div>
+      </div>
+      <div class="stats" id="cr-stats"></div>
+      <div class="cr-grid" id="cr-grid"></div>
+      <p class="note">One table per page. Click a line to type a request; the date fills in with today and can be changed. Tick a request when the content has arrived.</p>
+    </section>
+
     <!-- DATA IMPORT -->
     <section class="view" id="v-data" hidden>
       <div class="head"><div><div class="eyebrow">Settings</div><h1>Import data</h1></div></div>
@@ -735,13 +900,13 @@ function allTitles(){const t=new Set();DAYS.forEach(d=>(S.days[d.k]||[]).forEach
 /* ---------- routing ---------- */
 function route(){
   const v=(location.hash||"#home").slice(1);
-  const view=["home","lineup","chatters","checklist","fans-new","fans-total","hr-hire","hr-perf","data"].includes(v)?v:"home";
-  const sec=view.startsWith("fans")?"fans":view==="hr-hire"?"hire":view==="hr-perf"?"perf":view;
+  const view=["home","lineup","chatters","checklist","fans-new","fans-total","hr-hire","hr-perf","dev-table","dev-review","dev-targets","content","data"].includes(v)?v:"home";
+  const sec=view.startsWith("fans")?"fans":view==="hr-hire"?"hire":view==="hr-perf"?"perf":view==="dev-table"?"devt":view==="dev-review"?"devr":view==="dev-targets"?"devg":view;
   document.querySelectorAll(".view").forEach(s=>s.hidden=s.id!=="v-"+sec);
-  document.querySelectorAll(".nav a").forEach(a=>{if(a.dataset.view===view||(a.dataset.view==="fans"&&sec==="fans")||(a.dataset.view==="hr"&&(sec==="hire"||sec==="perf")))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  document.querySelectorAll(".nav a").forEach(a=>{if(a.dataset.view===view||(a.dataset.view==="fans"&&sec==="fans")||(a.dataset.view==="hr"&&(sec==="hire"||sec==="perf"))||(a.dataset.view==="dev"&&(sec==="devt"||sec==="devr"||sec==="devg")))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   gClear();
   if(sec==="fans"){const k=view==="fans-total"?"total":"new";if(k!==S.fanKind){S.fanKind=k;subFans()}renderFans()}
-  if(sec==="perf")renderPerf();if(sec==="hire")renderHire();
+  if(sec==="perf")renderPerf();if(sec==="hire")renderHire();if(sec==="devt")renderDevTable();if(sec==="devr")renderDevReview();if(sec==="devg")renderDevTargets();if(sec==="content")renderContent();
   window.scrollTo(0,0);
 }
 addEventListener("hashchange",route);
@@ -1522,6 +1687,317 @@ $("#hire-add").onclick=()=>{const rows=S.hire.map(x=>({...x}));rows.push(Object.
 const hmGo=n=>{S.hireMonth=shiftMonth(S.hireMonth,n);gClear();subHire();renderHire()};
 $("#hm-prev").onclick=()=>hmGo(-1);$("#hm-next").onclick=()=>hmGo(1);
 
+
+/* ---------- DEVELOPMENT TRACKING ---------- */
+S.devMonth=ukParts().date.slice(0,7);S.devModels=[];S.dev={};S.devLoaded=false;S.devModelsLoaded=false;S.devEdit=false;
+let unDev=null;
+function subDev(){
+  if(!S.db)return;if(unDev)unDev();S.devLoaded=false;const ym=S.devMonth,prev=shiftMonth(ym,-1);
+  unDev=S.db.collection("dev").where("month",">=",prev).where("month","<=",ym).onSnapshot(sn=>guard("dev",()=>{
+    if(ym!==S.devMonth)return;const m={};sn.docs.forEach(d=>{m[d.id]=d.data();existing.add("dev/"+d.id)});S.dev=m;S.devLoaded=true;if(!S.tEditing)renderDev();
+  }),()=>{});
+}
+function renderDev(){renderDevTable();renderDevReview();renderDevTargets();gPaint()}
+function saveDevModels(list){S.devModels=list;if(!S.db)return;queue("devmodels",()=>S.db.doc("dev/models").set({list}))}
+function saveDevVals(patch){const ym=S.devMonth;const d=S.dev[ym]=S.dev[ym]||{month:ym,v:{}};d.v=d.v||{};
+  Object.entries(patch).forEach(([id,o])=>d.v[id]=Object.assign({},d.v[id],o));if(!S.db)return;queue("dev",()=>upsert("dev/"+ym,{v:patch},{month:ym}))}
+function saveDevAdmin(patch){const ym=S.devMonth;const d=S.dev[ym]=S.dev[ym]||{month:ym,v:{}};d.admin=Object.assign({},d.admin,patch);if(!S.db)return;queue("dev",()=>upsert("dev/"+ym,{admin:patch},{month:ym}))}
+function saveDevBase(patch){const ym=S.devMonth;const d=S.dev[ym]=S.dev[ym]||{month:ym,v:{}};d.base=Object.assign({},d.base,patch);if(!S.db)return;queue("dev",()=>upsert("dev/"+ym,{base:patch},{month:ym}))}
+const numOrNull=x=>x===null||x===undefined||x===""||isNaN(Number(x))?null:Number(x);
+// Inviolable uplift on last month's total: up to $5,000 = 20%, $5,001–$19,999 = 10%, $20,000 and over = 5%
+function invRate(lastTotal){return lastTotal<=5000?0.20:lastTotal<20000?0.10:0.05}
+const ratePct=r=>Math.round(r*100)+"%";
+function devCalc(){
+  const ym=S.devMonth,prev=shiftMonth(ym,-1),nd=monthDays(ym),pnd=monthDays(prev),doc=S.dev[ym]||{};
+  const cur=doc.v||{},pv=(S.dev[prev]||{}).v||{},base=doc.base||{},adm=doc.admin||{};
+  const u=ukParts(),curYm=u.date.slice(0,7),isCur=curYm===ym,isPast=ym<curYm,today=isCur?+u.date.slice(8):0;
+  const raw=S.devModels.map(m=>{const vals=[],pvals=[];for(let d=1;d<=nd;d++)vals.push(numOrNull((cur[m.id]||{})[d]));for(let d=1;d<=pnd;d++)pvals.push(numOrNull((pv[m.id]||{})[d]));return {m,vals,pvals}});
+  let lastDay=0;raw.forEach(r=>r.vals.forEach((x,i)=>{if(x!=null&&i+1>lastDay)lastDay=i+1}));
+  const N=isPast?Math.min(nd,pnd):Math.min(lastDay,pnd);          // same-days window of last month
+  const rem=isCur?nd-(today-1):isPast?0:nd;                        // days left including today
+  const models=raw.map(({m,vals,pvals})=>{
+    let total=0,days=0,doneY=0;vals.forEach((x,i)=>{if(x!=null){total+=x;days++;if(isPast||(isCur&&i+1<today))doneY+=x}});
+    let pt=0,pd=0,pwt=0,pwd=0;pvals.forEach((x,i)=>{if(x!=null){pt+=x;pd++;if(i<N){pwt+=x;pwd++}}});
+    let lastTotal=null,lastWinTotal=null,lastWinAvg=null,src=null;
+    if(pd>0){lastTotal=pt;lastWinTotal=pwt;lastWinAvg=pwd?pwt/pwd:null;src="encoded"}
+    else if(numOrNull(base[m.id])!=null){lastTotal=Number(base[m.id]);lastWinTotal=lastTotal*N/pnd;lastWinAvg=lastTotal/pnd;src="manual"}
+    const rate=lastTotal!=null?invRate(lastTotal):null,up=rate!=null?1+rate:null;
+    const inv=lastTotal!=null?lastTotal*up:null,invAvg=lastWinAvg!=null?lastWinAvg*up:null,invWin=lastWinTotal!=null?lastWinTotal*up:null;
+    const avg=days?total/days:null,diff=avg!=null&&invAvg!=null?avg-invAvg:null;
+    const status=diff==null?"none":diff>=0?"sustain":diff>-100?"catch":"critical";
+    const admin=numOrNull(adm[m.id]);
+    const dailyAdmin=admin!=null&&rem>0?Math.max(0,(admin-doneY)/rem):null,dailyInv=inv!=null&&rem>0?Math.max(0,(inv-doneY)/rem):null;
+    return {id:m.id,name:m.name,vals,total,days,avg,lastTotal,lastWinTotal,lastWinAvg,src,rate,inv,invAvg,invWin,diff,status,admin,doneY,dailyAdmin,dailyInv};
+  });
+  const daily=[];for(let d=1;d<=nd;d++){let sum=0,n=0;models.forEach(m=>{const x=m.vals[d-1];if(x!=null){sum+=x;n++}});daily.push(n?sum:null)}
+  const enc=daily.filter(x=>x!=null),total=enc.reduce((a,b)=>a+b,0),sum=k=>models.reduce((a,m)=>a+(m[k]||0),0);
+  return {ym,prev,nd,pnd,N,rem,today,isCur,isPast,models,daily,total,encDays:enc.length,dailyAvg:enc.length?total/enc.length:null,lastDay,
+    lastTotal:sum("lastTotal"),lastWinTotal:sum("lastWinTotal"),invTotal:sum("inv"),invAvgSum:sum("invAvg"),adminTotal:sum("admin"),doneY:sum("doneY"),
+    dailyAdmin:sum("dailyAdmin"),dailyInv:sum("dailyInv"),hasBase:models.some(m=>m.invAvg!=null),hasAdmin:models.some(m=>m.admin!=null)};
+}
+const sgn=(n,dp=2)=>(n>=0?"+":"−")+money(Math.abs(n),dp);
+const monName=ym=>{const [y,m]=ym.split("-").map(Number);return MONTHS[m-1]+" "+y};
+const monShort=ym=>MONTHS[+ym.split("-")[1]-1];
+const winLabel=C=>{const p=monShort(C.prev).slice(0,3);return C.N&&C.N<C.pnd?`${p} 1–${C.N}`:p};
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+function renderDevTable(){
+  const t=$("#dev-table");if(!t||S.tEditing)return;
+  document.querySelectorAll(".dev-month").forEach(e=>e.textContent=monName(S.devMonth));
+  $("#dev-edit").setAttribute("aria-pressed",S.devEdit);$("#dev-edit").disabled=S.readOnly;$("#dev-add").hidden=!S.devEdit||S.readOnly;
+  if((!S.devLoaded||!S.devModelsLoaded)&&S.db){t.innerHTML=`<tbody><tr><td class="empty-state" style="border:0">Loading…</td></tr></tbody>`;$("#dev-stats").innerHTML="";return}
+  const C=devCalc(),M=C.models,todayD=C.today,WL=winLabel(C),p3=monShort(C.prev).slice(0,3);
+  const dAvgDiff=C.dailyAvg!=null&&C.hasBase?C.dailyAvg-C.invAvgSum:null;
+  $("#dev-stats").innerHTML=`<div class="stat"><span class="l">${monShort(C.ym)} total so far</span><span class="v">${money(C.total,0)}</span><span class="l">${C.encDays} day${C.encDays===1?"":"s"} entered${C.lastWinTotal?` · ${WL} was ${money(C.lastWinTotal,0)}`:""}</span></div>
+    <div class="stat"><span class="l">Agency daily average</span><span class="v">${C.dailyAvg!=null?money(C.dailyAvg,0):"—"}</span><span class="l">${dAvgDiff!=null?`<span class="${dAvgDiff>=0?"pos-t":"neg-t"}">${sgn(dAvgDiff,0)}/day</span> vs ${WL} plus uplift`:"No last-month figures yet"}</span></div>
+    <div class="stat"><span class="l">Inviolable target</span><span class="v">${C.invTotal?money(C.invTotal,0):"—"}</span><span class="l">${C.invTotal?`${pct(C.total,C.invTotal)}% reached · ${monShort(C.prev)} plus uplift`:"Needs last month's figures"}</span></div>
+    <div class="stat"><span class="l">Admin target</span><span class="v">${C.hasAdmin?money(C.adminTotal,0):"—"}</span><span class="l">${C.hasAdmin?`${pct(C.total,C.adminTotal)}% reached`:"Not set yet. Type it in the Admin target row"}</span></div>`;
+  if(!M.length){t.innerHTML=`<tbody><tr><td class="empty-state" style="border:0">No models yet. Click <b>Edit models</b> and add your pages to start the table.</td></tr></tbody>`;return}
+  let h=`<thead><tr><th class="d">Date</th>${M.map((m,i)=>`<th data-devname="${i}" title="Double-click to rename">${esc(m.name)}${S.devEdit&&!S.readOnly?`<button class="mini rm" data-devrm="${i}" title="Remove ${esc(m.name)}">✕</button>`:""}</th>`).join("")}<th>Daily total</th></tr></thead><tbody>`;
+  for(let d=1;d<=C.nd;d++){const iso=C.ym+"-"+String(d).padStart(2,"0"),wd=new Date(iso+"T12:00:00Z").getUTCDay();
+    h+=`<tr class="${d===todayD?"today":""}${wd===0||wd===6?" wkend":""}"><td class="d">${String(d).padStart(2,"0")} ${monShort(C.ym).slice(0,3)}<small>${fmt(iso,{weekday:"short"})}</small></td>${M.map((m,i)=>`<td class="v" data-gt="dev" data-r="${d-1}" data-c="${i}">${m.vals[d-1]==null?"":money(m.vals[d-1])}</td>`).join("")}<td class="dt" data-gt="dev" data-r="${d-1}" data-c="${M.length}">${C.daily[d-1]==null?"":money(C.daily[d-1])}</td></tr>`}
+  const sumCell=(v,show)=>`<td>${show?money(v):""}</td>`;
+  h+=`</tbody><tfoot>
+    <tr class="lm"><td class="d">Last month · ${p3}</td>${M.map((m,i)=>m.src==="encoded"?`<td title="From what was entered for ${monName(C.prev)}">${money(m.lastTotal)}</td>`:`<td class="${m.lastTotal==null?"need":""}" data-gt="devbase" data-r="0" data-c="${i}" title="Type last month's total">${m.lastTotal==null?"type total":money(m.lastTotal)}</td>`).join("")}${sumCell(C.lastTotal,C.lastTotal)}</tr>
+    <tr class="lm"><td class="d">Same days · ${WL}</td>${M.map(m=>`<td title="${m.src==="manual"?"Estimated from the typed total":"Last month, same days"}">${m.lastWinTotal==null||!C.N?"—":money(m.lastWinTotal)}</td>`).join("")}${sumCell(C.lastWinTotal,C.lastWinTotal&&C.N)}</tr>
+    <tr class="tg"><td class="d">Inviolable target<span class="lock" title="Last month plus the uplift. Can't be edited.">fixed</span></td>${M.map(m=>`<td title="${m.rate==null?"":"Last month plus "+ratePct(m.rate)+". Can't be edited."}">${m.inv==null?"—":money(m.inv)}</td>`).join("")}${sumCell(C.invTotal,C.invTotal)}</tr>
+    <tr class="tg"><td class="d">Uplift on last month</td>${M.map(m=>`<td>${m.rate==null?"—":"+"+ratePct(m.rate)}</td>`).join("")}<td></td></tr>
+    <tr class="tg"><td class="d">Target pace / day</td>${M.map(m=>`<td title="${m.rate==null?"":WL+" average plus "+ratePct(m.rate)}">${m.invAvg==null?"—":money(m.invAvg)}</td>`).join("")}${sumCell(C.invAvgSum,C.hasBase)}</tr>
+    <tr class="tg adm"><td class="d">Admin target<span class="lock ed">editable</span></td>${M.map((m,i)=>`<td class="${m.admin==null?"need":""}" data-gt="devadm" data-r="0" data-c="${i}" title="Type the admin target for the month">${m.admin==null?"set target":money(m.admin)}</td>`).join("")}${sumCell(C.adminTotal,C.hasAdmin)}</tr>
+    <tr class="st s3"><td class="d">Total</td>${M.map(m=>`<td>${m.days?money(m.total):""}</td>`).join("")}<td>${C.encDays?money(C.total):""}</td></tr>
+    <tr class="st s2"><td class="d">Average</td>${M.map(m=>`<td>${m.avg==null?"":money(m.avg)}</td>`).join("")}<td>${C.dailyAvg==null?"":money(C.dailyAvg)}</td></tr>
+    <tr class="st s1"><td class="d">Average diff</td>${M.map(m=>`<td class="${m.status==="sustain"?"pos":m.status==="catch"?"cat":m.status==="critical"?"neg":""}" title="${(m.status==="sustain"?"Sustain":m.status==="catch"?"Catching up":m.status==="critical"?"Critical":"No last-month figure")+(m.rate==null?"":" · average vs "+WL+" +"+ratePct(m.rate))}">${m.diff==null?"—":sgn(m.diff)}</td>`).join("")}<td class="${dAvgDiff==null?"":dAvgDiff>=0?"pos":"neg"}">${dAvgDiff==null?"":sgn(dAvgDiff)}</td></tr>
+  </tfoot>`;
+  t.innerHTML=h;
+}
+function DevAdapter(){
+  const nd=monthDays(S.devMonth),M=S.devModels;
+  return {rows:()=>nd,cols:()=>M.length+1,
+    get(r,c){if(c>=M.length){const x=devCalc().daily[r];return x==null?"":String(Math.round(x*100)/100)}const x=numOrNull((((S.dev[S.devMonth]||{}).v||{})[M[c].id]||{})[r+1]);return x==null?"":String(x)},
+    set(ch){const patch={};let bad=0;
+      ch.forEach(({r,c,v})=>{if(c>=M.length||r>=nd)return;const tx=String(v).replace(/[$£€,\s]/g,"");const id=M[c].id;
+        if(tx===""){(patch[id]=patch[id]||{})[r+1]=null;return}const n=Number(tx);if(isNaN(n)){bad++;return}(patch[id]=patch[id]||{})[r+1]=n});
+      if(bad)toast(`Skipped ${bad} value${bad===1?"":"s"} that weren't numbers`);
+      if(Object.keys(patch).length)saveDevVals(patch);renderDev()},
+    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c;if(c>=M.length)return;const cur=this.get(r,c);
+      textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null)this.set([{r,c,v}]);afterEdit("dev",r,c,dr,dc,renderDev)})}};
+}
+function DevBaseAdapter(){
+  const M=S.devModels;
+  return {rows:()=>1,cols:()=>M.length,
+    get(r,c){const b=((S.dev[S.devMonth]||{}).base||{})[M[c]?.id];return numOrNull(b)==null?"":String(b)},
+    set(ch){const patch={};ch.forEach(({c,v})=>{if(!M[c])return;const tx=String(v).replace(/[$£€,\s]/g,"");patch[M[c].id]=tx===""||isNaN(Number(tx))?null:Number(tx)});if(Object.keys(patch).length)saveDevBase(patch);renderDev()},
+    edit(el,i){const c=+el.dataset.c;const cur=this.get(0,c);textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null)this.set([{r:0,c,v}]);afterEdit("devbase",0,c,0,dc,renderDev)})}};
+}
+function moneyIn(v){const tx=String(v).replace(/[$£€,\s]/g,"");return tx===""||isNaN(Number(tx))?null:Number(tx)}
+function DevAdmAdapter(tid){ // admin target cells: a row in the Development Table ("devadm") and a column in Business Targets ("tgt")
+  const M=S.devModels,row=tid==="devadm",ix=(r,c)=>row?c:r;
+  return {rows:()=>row?1:M.length,cols:()=>row?M.length:1,
+    get(r,c){const a=((S.dev[S.devMonth]||{}).admin||{})[M[ix(r,c)]?.id];return numOrNull(a)==null?"":String(a)},
+    set(ch){const patch={};ch.forEach(({r,c,v})=>{const m=M[ix(r,c)];if(m&&(row?r===0:c===0))patch[m.id]=moneyIn(v)});if(Object.keys(patch).length)saveDevAdmin(patch);renderDev()},
+    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c,cur=this.get(r,c);textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null)this.set([{r,c,v}]);afterEdit(tid,r,c,row?0:dr,row?dc:0,renderDev)})}};
+}
+$("#dev-table").addEventListener("dblclick",e=>{
+  const th=e.target.closest("[data-devname]");
+  if(th&&!S.readOnly&&!e.target.closest("button")){const i=+th.dataset.devname,cur=S.devModels[i].name;textEdit(th,cur,null,v=>{if(v){const l=S.devModels.map(x=>({...x}));l[i].name=v;saveDevModels(l)}renderDev()});return}
+  const td=e.target.closest('[data-gt="dev"],[data-gt="devbase"],[data-gt="devadm"]');if(td){const ad=adapter(td.dataset.gt);ad&&ad.edit(td)}
+});
+$("#dev-table").addEventListener("click",e=>{const b=e.target.closest("[data-devrm]");if(!b||S.readOnly)return;e.stopPropagation();
+  if(!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Remove?";setTimeout(()=>{if(b.isConnected){b.classList.remove("armed");b.textContent="✕"}},3000);return}
+  const l=S.devModels.slice();l.splice(+b.dataset.devrm,1);saveDevModels(l);gClear();renderDev();toast("Model removed")});
+$("#dev-edit").onclick=()=>{S.devEdit=!S.devEdit;renderDevTable();if(S.devEdit)$("#dev-add-names").focus()};
+$("#dev-add").addEventListener("submit",e=>{e.preventDefault();const names=$("#dev-add-names").value.split(/[,\n\t]+/).map(x=>x.trim()).filter(Boolean);if(!names.length)return;
+  const have=new Set(S.devModels.map(m=>norm(m.name)));const l=S.devModels.slice();let n=0;names.forEach(x=>{if(!have.has(norm(x))){have.add(norm(x));l.push({id:uid("m"),name:x});n++}});
+  saveDevModels(l);$("#dev-add-names").value="";renderDev();toast(n?`Added ${n} model${n===1?"":"s"}`:"Those models are already in the table")});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-devm]");if(!b)return;S.devMonth=shiftMonth(S.devMonth,+b.dataset.devm);gClear();subDev();renderDev()});
+
+function renderDevReview(){
+  const box=$("#dev-review");if(!box)return;
+  if((!S.devLoaded||!S.devModelsLoaded)&&S.db){box.innerHTML=`<div class="empty-state">Loading…</div>`;return}
+  const C=devCalc(),M=C.models.filter(m=>m.days>0||m.invAvg!=null),cm=monShort(C.ym),pm=monShort(C.prev),WL=winLabel(C),basis=`${WL} plus uplift`;
+  if(!M.some(m=>m.days>0)){box.innerHTML=`<div class="panel empty-state">Nothing entered for ${monName(C.ym)} yet. Add sales in the <a href="#dev-table">Development Table</a> and the review writes itself.</div>`;return}
+  const withB=M.filter(m=>m.diff!=null),pos=withB.filter(m=>m.diff>=0),neg=withB.filter(m=>m.diff<0);
+  const crit=withB.filter(m=>m.status==="critical").sort((a,b)=>a.diff-b.diff),cat=withB.filter(m=>m.status==="catch").sort((a,b)=>a.diff-b.diff),sus=pos.slice().sort((a,b)=>b.diff-a.diff);
+  const noBase=M.filter(m=>m.diff==null&&m.days>0);
+  const live=C.isCur&&C.rem>0,netDiff=withB.reduce((a,m)=>a+m.diff,0),gain=pos.reduce((a,m)=>a+m.diff,0),loss=neg.reduce((a,m)=>a+m.diff,0);
+  const proj=C.dailyAvg!=null?C.dailyAvg*C.nd:null;
+  const names=l=>{const a=l.map(m=>esc(m.name));return a.length<=1?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1]};
+  let h=`<div class="view" style="max-width:none;gap:20px"><div class="hint">Every rating on this page compares this month's daily average with the <b>same days of last month plus that page's uplift</b> (${esc(WL)}; +20% for pages at $5,000 or less last month, +10% for $5,001 to $19,999, +5% for $20,000 and over). That is the pace of the Inviolable target.</div><div class="rev-hero">
+    <div class="stat"><span class="l">Models in positive</span><span class="v good">${pos.length}</span><span class="l">${pos.length?names(sus.slice(0,4))+(pos.length>4?` +${pos.length-4}`:""):"None yet"}</span></div>
+    <div class="stat"><span class="l">Models in negative</span><span class="v bad">${neg.length}</span><span class="l">${crit.length} critical · ${cat.length} catching up</span></div>
+    <div class="stat"><span class="l">Inviolable target</span><span class="v">${C.invTotal?money(C.invTotal,0):"—"}</span><span class="l">${C.invTotal?`${pct(C.total,C.invTotal)}% reached${live&&proj!=null?` · on pace for ${money(proj,0)}`:""}`:"Needs last month's figures"}</span></div>
+    <div class="stat"><span class="l">Admin target</span><span class="v">${C.hasAdmin?money(C.adminTotal,0):"—"}</span><span class="l">${C.hasAdmin?`${pct(C.total,C.adminTotal)}% reached${live?` · ${money(C.dailyAdmin,0)} needed today`:""}`:`Not set. Add it in <a href="#dev-targets">Business Targets</a>`}</span></div>
+  </div>`;
+  const need=m=>{let t="";
+    if(live&&m.inv!=null){const gap=m.inv-m.doneY;t+=gap<=0?` Inviolable target of ${money(m.inv,0)} already reached.`:` Needs <b>${money(gap/C.rem,0)}/day</b> over the last ${C.rem} day${C.rem===1?"":"s"} to reach the Inviolable target (${money(m.inv,0)}).`}
+    else if(C.isPast&&m.inv!=null)t+=m.total>=m.inv?` Closed ${money(m.total-m.inv,0)} over the Inviolable target.`:` Closed ${money(m.inv-m.total,0)} short of the Inviolable target (${money(m.inv,0)}).`;
+    if(m.admin!=null)t+=live?` Admin target ${money(m.admin,0)}: ${m.dailyAdmin>0?`<b>${money(m.dailyAdmin,0)}/day</b> from today.`:"reached."}`:C.isPast?` Admin target ${money(m.admin,0)}: ${m.total>=m.admin?"reached":"missed by "+money(m.admin-m.total,0)}.`:"";
+    return t};
+  const item=m=>`<div class="rev-item"><b>${esc(m.name)}</b><span class="dl ${m.diff>=0?"pos-t":m.status==="catch"?"cat-t":"neg-t"}">${sgn(m.diff)}/day</span><span class="sub">Averaging ${money(m.avg)} against a target pace of ${money(m.invAvg)} (${esc(WL)} +${ratePct(m.rate)}).${need(m)}</span></div>`;
+  const colm=(cls,title,sub,list)=>`<div class="rev-col ${cls}"><header><div><h3>${title}</h3><p>${sub}</p></div><span>${list.length}</span></header>${list.length?list.map(item).join(""):`<div class="rev-item"><span class="sub">No pages here.</span></div>`}</div>`;
+  h+=`<div class="rev-cols">${colm("crit","Critical","$100 or more a day behind the target pace",crit)}${colm("catch","Catching up","$1 to $99 a day behind the target pace",cat)}${colm("sus","Should be sustained","At or above the target pace",sus)}</div>`;
+  if(noBase.length)h+=`<div class="hint">No last-month figure for <b>${names(noBase)}</b>, so ${noBase.length===1?"it isn't":"they aren't"} rated. Type last month's total in the Development Table to include ${noBase.length===1?"it":"them"}.</div>`;
+  if(withB.length){const mx=Math.max(...withB.map(m=>Math.abs(m.diff)),1);
+    h+=`<div class="panel"><div class="panel-head"><div><div class="eyebrow">Daily average vs target pace · ${esc(basis)}</div><h2 style="margin-top:4px">Who is ahead or behind, per day</h2></div><span class="note">Left of the line is behind the target pace, right is ahead</span></div><div class="diffbars">${
+      withB.slice().sort((a,b)=>b.diff-a.diff).map(m=>`<div class="db-row"><span class="nm">${esc(m.name)}</span><span class="db-neg">${m.diff<0?`<i class="${m.status==="catch"?"cat":""}" style="width:${Math.abs(m.diff)/mx*100}%"></i>`:""}</span><span class="db-pos">${m.diff>=0?`<i style="width:${m.diff/mx*100}%"></i>`:""}</span><span class="val ${m.diff>=0?"pos-t":m.status==="catch"?"cat-t":"neg-t"}">${sgn(m.diff,0)}</span></div>`).join("")}</div></div>`}
+  // ---- plain, practical notes for the ops team
+  const N=[];const act=M.filter(m=>m.days>0),B=x=>`<b>${x}</b>`,dy=n=>`${n} day${n===1?"":"s"}`;
+  const lowDay=m=>{const xs=m.vals.filter(x=>x!=null);return xs.length?Math.min(...xs):0};
+  if(live&&C.invTotal){ // the month as a whole
+    const short=C.dailyInv-C.dailyAvg;
+    N.push(`<span class="tagx info">This month</span>All pages together need to make ${B(money(C.dailyInv,0)+" a day")} from today to hit the Inviolable target. Right now they make ${money(C.dailyAvg,0)} a day, so ${short>0?`we are ${B(money(short,0)+" a day short")}. If nothing changes, the month ends about ${money(C.invTotal-proj,0)} under target.`:`we are on track. Keep the same pace and the month ends about ${money(proj-C.invTotal,0)} over target.`}`)}
+  if(live){
+    // critical: say what it must reach and what happens if it doesn't
+    crit.slice(0,5).forEach(m=>{const projM=m.doneY+m.avg*C.rem,miss=m.inv-projM,extra=m.dailyInv-m.avg;
+      if(extra<=0){N.push(`<span class="tagx risk">Urgent</span>${B(esc(m.name))} is well behind where it was on the same days last month. At ${money(m.avg,0)} a day it can still reach the month's target, but only if it does not drop any further. Watch it daily.`);return}
+      N.push(`<span class="tagx risk">Urgent</span>${B(esc(m.name))} really needs to get to ${B(money(m.dailyInv,0)+" a day")} from today. It makes ${money(m.avg,0)} now, so that is ${money(extra,0)} more every day. If it stays where it is, it misses its Inviolable target by about ${B(money(miss,0))}${C.invTotal&&miss>0?`, and that alone is ${Math.round(miss/C.invTotal*100)||"under 1"}% of the whole agency target`:""}. Put your strongest chatter here and check new content is coming in.`)});
+    if(crit.length>5)N.push(`<span class="tagx risk">Urgent</span>${names(crit.slice(5))} ${crit.length-5===1?"is":"are"} also critical. See the Critical column above for what each one needs per day.`);
+    // catching up: how small the gap is
+    cat.slice(0,4).forEach(m=>{const extra=Math.max(0,m.dailyInv-m.avg);
+      if(extra<=0){N.push(`<span class="tagx watch">Push</span>${B(esc(m.name))} is a little behind where it was on the same days last month, but at ${money(m.avg,0)} a day it still reaches its target for the month. Hold this level. One slow week would put the target out of reach.`);return}
+      N.push(`<span class="tagx watch">Push</span>${B(esc(m.name))} is close. It needs ${B(money(m.dailyInv,0)+" a day")} and makes ${money(m.avg,0)}, so it is only ${B(money(extra,0)+" a day")} away. ${extra<=60?"One extra PPV sale a day is enough to turn it positive.":"A couple of extra sales each shift would turn it positive."} Don't let it slide, because ${money(100-Math.abs(m.diff),0)} less a day would make it critical.`)});
+    if(cat.length>4)N.push(`<span class="tagx watch">Push</span>${names(cat.slice(4))} ${cat.length-4===1?"is":"are"} also just behind. A small daily push on each is enough.`);
+    // sustain: how thin the cushion is
+    const cush=sus.map(m=>{const ahead=m.diff*m.days,low=Math.min(lowDay(m),m.invAvg*0.6),k=m.invAvg>low?Math.floor(ahead/(m.invAvg-low))+1:99;return {m,ahead,low,k}}).sort((a,b)=>a.k-b.k);
+    cush.filter(x=>x.k<=5).slice(0,4).forEach(x=>N.push(`<span class="tagx win">Keep it up</span>${B(esc(x.m.name))} should carry on exactly as it is, but it is not safe yet. It is only ${money(x.ahead,0)} ahead so far, so just ${B(dy(x.k))} of low sales (around ${money(x.low,0)} or less) would turn it negative. Keep the same chatters and the same routine on this page.${x.m.dailyInv>x.m.avg*1.02?` It also has to lift slightly, to ${money(x.m.dailyInv,0)} a day, because last month finished stronger than it started.`:""}`));
+    const safe=cush.filter(x=>x.k>5);
+    if(safe.length)N.push(`<span class="tagx win">Keep it up</span>${names(safe.map(x=>x.m))} ${safe.length===1?"is":"are"} comfortably ahead and can take a few slow days. Don't change what is working here, and don't pull ${safe.length===1?"its chatter":"their chatters"} to cover other pages unless you have to.`);
+  }else if(C.isPast&&C.invTotal&&C.encDays){
+    N.push(`<span class="tagx ${C.total>=C.invTotal?"win":"risk"}">Result</span>${cm} finished at ${B(money(C.total,0))}. The Inviolable target was ${money(C.invTotal,0)}, so the agency ${C.total>=C.invTotal?`beat it by ${B(money(C.total-C.invTotal,0))}`:`missed it by ${B(money(C.invTotal-C.total,0))}`}.${C.hasAdmin?` The Admin target of ${money(C.adminTotal,0)} was ${C.total>=C.adminTotal?"reached":"missed by "+money(C.adminTotal-C.total,0)}.`:""}`);
+    const missed=withB.filter(m=>m.total<m.inv).sort((a,b)=>(b.inv-b.total)-(a.inv-a.total)),hit=withB.filter(m=>m.total>=m.inv);
+    if(missed.length)N.push(`<span class="tagx risk">Missed</span>${missed.slice(0,5).map(m=>`${B(esc(m.name))} (short by ${money(m.inv-m.total,0)})`).join(", ")} did not reach ${missed.length===1?"its":"their"} target. Start next month by fixing ${esc(missed[0].name)} first, as it cost the most.`);
+    if(hit.length)N.push(`<span class="tagx win">Reached</span>${names(hit)} reached ${hit.length===1?"its":"their"} target. Keep the same chatters on ${hit.length===1?"it":"them"} next month.`)}
+  // where the money comes from
+  if(act.length>=3&&C.total>0){const s3=act.slice().sort((a,b)=>b.total-a.total).slice(0,3),sh=s3.reduce((a,m)=>a+m.total,0)/C.total*100;
+    N.push(`<span class="tagx info">Protect</span>Most of the money (${Math.round(sh)}%) comes from ${B(names(s3))}. Never leave these pages uncovered. If a chatter is absent, move someone over from a smaller page instead of leaving one of these empty.`)}
+  // slowing down / picking up
+  if(C.lastDay>=10){const half=Math.floor(C.lastDay/2);const tr=act.map(m=>{let a=0,an=0,b=0,bn=0;m.vals.slice(0,C.lastDay).forEach((x,i)=>{if(x==null)return;if(i<half){a+=x;an++}else{b+=x;bn++}});return an>=3&&bn>=3?{m,first:a/an,second:b/bn}:null}).filter(Boolean);
+    const fade=tr.filter(x=>x.first>0&&x.second<x.first*0.8&&x.m.total/C.total>0.02).sort((a,b)=>(b.first-b.second)-(a.first-a.second)).slice(0,3);
+    const rise=tr.filter(x=>x.first>0&&x.second>x.first*1.2&&x.m.total/C.total>0.02).sort((a,b)=>(b.second-b.first)-(a.second-a.first)).slice(0,3);
+    fade.forEach(x=>N.push(`<span class="tagx watch">Slowing down</span>${B(esc(x.m.name))} was making ${money(x.first,0)} a day at the start of the month and is now at ${money(x.second,0)}. ${x.m.status==="sustain"?"It still looks positive, but only because of the early days. ":""}Check who is chatting it now and whether any new content has arrived.`));
+    if(rise.length)N.push(`<span class="tagx win">Picking up</span>${names(rise.map(x=>x.m))} ${rise.length===1?"is":"are"} doing better now than at the start of the month. Find out what changed (a new chatter, new content, a promo) and keep it.`)}
+  // best and weakest weekday
+  {const wd=[[],[],[],[],[],[],[]];C.daily.forEach((x,i)=>{if(x!=null)wd[new Date(C.ym+"-"+String(i+1).padStart(2,"0")+"T12:00:00Z").getUTCDay()].push(x)});
+    const av=wd.map((a,i)=>a.length>=2?{i,avg:a.reduce((p,q)=>p+q,0)/a.length}:null).filter(Boolean);
+    if(av.length>=5){const hi=av.slice().sort((a,b)=>b.avg-a.avg)[0],lo=av.slice().sort((a,b)=>a.avg-b.avg)[0],DN=["Sundays","Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays"];
+      if(hi.avg>lo.avg*1.08)N.push(`<span class="tagx info">Staffing</span>${B(DN[hi.i])} are your best day and ${B(DN[lo.i])} the slowest. Keep your best chatters on ${DN[hi.i]} and avoid days off then. Use ${DN[lo.i]} for days off, training and relievers.`)}}
+  // one lucky day
+  {const sp=act.map(m=>{const xs=m.vals.filter(x=>x!=null);if(xs.length<7||!m.total)return null;const mx=Math.max(...xs),rest=(m.total-mx)/(xs.length-1);return mx>rest*3&&mx/m.total>0.12?{m,mx,rest,day:m.vals.indexOf(mx)+1}:null}).filter(Boolean).sort((a,b)=>b.mx-a.mx).slice(0,3);
+    sp.forEach(x=>N.push(`<span class="tagx watch">Don't rely on it</span>${B(esc(x.m.name))} looks strong mostly because of one big day (${money(x.mx,0)} on ${x.day} ${cm.slice(0,3)}). On a normal day it makes about ${money(x.rest,0)}${x.m.invAvg!=null?`, which is ${x.rest>=x.m.invAvg?"still above":B("below")} what it needs`:""}. Find out who spent that day and make sure that fan is being looked after.`))}
+  // days with almost nothing
+  {const z=act.map(m=>({m,z:m.vals.filter(x=>x!=null&&x<=5).length})).filter(x=>x.z>=2).sort((a,b)=>b.z-a.z).slice(0,4);
+    if(z.length)N.push(`<span class="tagx risk">Check cover</span>${z.map(x=>`${B(esc(x.m.name))} had ${dy(x.z)} with almost no sales`).join(", ")}. Look at the Shift Line Up for those dates. Usually it means nobody was on the page or there was nothing new to sell.`)}
+  // admin target out of reach
+  if(live&&C.hasAdmin){const gapPages=M.filter(m=>m.admin!=null&&m.dailyAdmin!=null&&m.avg!=null&&m.dailyAdmin>m.avg*1.5&&m.dailyAdmin-m.avg>50).sort((a,b)=>(b.dailyAdmin-b.avg)-(a.dailyAdmin-a.avg)).slice(0,3);
+    gapPages.forEach(m=>N.push(`<span class="tagx watch">Target too far</span>${B(esc(m.name))}'s Admin target asks chatters for ${money(m.dailyAdmin,0)} a day, but the page only makes ${money(m.avg,0)}. They will miss it every day like this. Either add help on this page or lower its Admin target.`))}
+  if(!withB.length)N.push(`<span class="tagx info">Add last month</span>There are no figures for ${monName(C.prev)} yet, so pages can't be rated. Enter them in the Development Table, or type each page's last-month total in the “Last month” row.`);
+  h+=`<div class="panel"><div class="panel-head"><div><div class="eyebrow">For the ops team</div><h2 style="margin-top:4px">What to do about it</h2></div><span class="note">Updates as figures are entered</span></div><ol class="notes-list">${N.map(x=>`<li>${x}</li>`).join("")}</ol></div></div>`;
+  box.innerHTML=h;
+}
+
+/* ---- business targets ---- */
+function chatterTargets(C){ // split each page's daily Admin target across the shifts and chatters covering it on today's line up
+  const shifts=todayShifts().slice().sort((a,b)=>{const ra=parseRange(a.title),rb=parseRange(b.title);return (ra?ra.s:9e3)-(rb?rb.s:9e3)});
+  const out=shifts.map(s=>({title:s.title,rows:new Map()})),unplaced=[];
+  C.models.forEach(m=>{if(m.dailyAdmin==null)return;const k=norm(m.name);
+    const cover=shifts.map((s,si)=>({si,gs:s.groups.filter(g=>g.chatter.trim()&&g.pages.some(p=>norm(p)===k))})).filter(x=>x.gs.length);
+    if(!cover.length){unplaced.push(m);return}
+    const perShift=m.dailyAdmin/cover.length;
+    cover.forEach(({si,gs})=>gs.forEach(g=>{const nm=g.chatter.trim(),key=norm(nm),R=out[si].rows;if(!R.has(key))R.set(key,{name:nm,pages:[],total:0});const row=R.get(key),amt=perShift/gs.length;row.pages.push({name:m.name,amt});row.total+=amt}))});
+  return {shifts:out.filter(s=>s.rows.size),unplaced};
+}
+function renderDevTargets(){
+  const box=$("#dev-targets");if(!box||S.tEditing)return;
+  if((!S.devLoaded||!S.devModelsLoaded)&&S.db){box.innerHTML=`<div class="empty-state">Loading…</div>`;return}
+  const C=devCalc(),M=C.models,cm=monShort(C.ym),pm=monShort(C.prev),live=C.isCur&&C.rem>0;
+  if(!M.length){box.innerHTML=`<div class="panel empty-state">No models yet. Add your pages in the <a href="#dev-table">Development Table</a> first.</div>`;return}
+  const through=C.isCur?(C.today>1?`1–${C.today-1} ${cm.slice(0,3)}`:"no days yet"):C.isPast?cm:"not started";
+  const bar=(done,target,cls)=>target?`<span class="tbar ${cls}" title="${pct(done,target)}% of ${money(target,0)}"><i style="width:${Math.min(100,done/target*100)}%"></i></span><span class="tpct">${pct(done,target)}%</span>`:`<span class="note">—</span>`;
+  let h=`<div class="view" style="max-width:none;gap:20px"><div class="rev-hero">
+    <div class="stat"><span class="l">Inviolable target</span><span class="v">${C.invTotal?money(C.invTotal,0):"—"}</span><span class="l">${C.invTotal?`${pm} totals plus uplift · fixed`:"Needs last month's figures"}</span></div>
+    <div class="stat"><span class="l">Admin target</span><span class="v">${C.hasAdmin?money(C.adminTotal,0):"—"}</span><span class="l">${C.hasAdmin?"Set by admin · editable below":"Not set yet. Click a cell in the Admin target column"}</span></div>
+    <div class="stat"><span class="l">Sales counted · ${esc(through)}</span><span class="v">${money(C.doneY,0)}</span><span class="l">${C.invTotal?pct(C.doneY,C.invTotal)+"% of Inviolable":""}${C.invTotal&&C.hasAdmin?" · ":""}${C.hasAdmin?pct(C.doneY,C.adminTotal)+"% of Admin":""}</span></div>
+    <div class="stat"><span class="l">${live?"Today's agency target":"Days left"}</span><span class="v">${live?(C.hasAdmin?money(C.dailyAdmin,0):"—"):C.rem}</span><span class="l">${live?`${C.rem} day${C.rem===1?"":"s"} left including today${C.invTotal?` · Inviolable needs ${money(C.dailyInv,0)}/day`:""}`:C.isPast?"Month closed":"Month not started"}</span></div>
+  </div>
+  <div class="panel" style="padding:0;overflow:hidden"><div class="panel-head" style="padding:16px 20px 0"><div><div class="eyebrow">Targets by page</div><h2 style="margin-top:4px">${monName(C.ym)}</h2></div><span class="note">Daily figures use sales from the 1st up to yesterday and change every day</span></div>
+  <div class="tgt-wrap"><table class="tgt"><thead><tr><th class="l">Page</th><th>${pm.slice(0,3)} total</th><th>Inviolable target<small>${pm.slice(0,3)} + uplift · fixed</small></th><th>Admin target<small>click to set</small></th><th>Sales · ${esc(through)}</th><th class="hl">${live?"Today's target":"Result"}<small>Admin · for chatters</small></th><th>${live?"Needed / day":"Result"}<small>Inviolable</small></th><th class="l">Inviolable progress</th><th class="l">Admin progress</th></tr></thead><tbody>`;
+  const res=(done,t)=>t==null?"—":done>=t?`<span class="pos-t">+${money(done-t,0)}</span>`:`<span class="neg-t">−${money(t-done,0)}</span>`;
+  h+=M.map((m,r)=>`<tr><td class="l nm">${esc(m.name)}</td><td>${m.lastTotal==null?"—":money(m.lastTotal,0)}</td><td class="inv">${m.inv==null?"—":money(m.inv,0)+` <span class="up">+${ratePct(m.rate)}</span>`}</td>
+    <td class="adm${m.admin==null?" need":""}" data-gt="tgt" data-r="${r}" data-c="0" title="Click to set the admin target">${m.admin==null?"set target":money(m.admin,0)}</td>
+    <td>${money(m.doneY,0)}</td>
+    <td class="hl">${live?(m.dailyAdmin==null?"—":m.dailyAdmin>0?"<b>"+money(m.dailyAdmin,0)+"</b>":'<span class="pos-t">reached</span>'):res(m.doneY,m.admin)}</td>
+    <td>${live?(m.dailyInv==null?"—":m.dailyInv>0?money(m.dailyInv,0):'<span class="pos-t">reached</span>'):res(m.doneY,m.inv)}</td>
+    <td class="l">${bar(m.doneY,m.inv,"b-inv")}</td><td class="l">${bar(m.doneY,m.admin,"b-adm")}</td></tr>`).join("");
+  h+=`</tbody><tfoot><tr><td class="l">All pages</td><td>${C.lastTotal?money(C.lastTotal,0):"—"}</td><td>${C.invTotal?money(C.invTotal,0):"—"}</td><td>${C.hasAdmin?money(C.adminTotal,0):"—"}</td><td>${money(C.doneY,0)}</td><td class="hl">${live?(C.hasAdmin?money(C.dailyAdmin,0):"—"):res(C.doneY,C.hasAdmin?C.adminTotal:null)}</td><td>${live?(C.invTotal?money(C.dailyInv,0):"—"):res(C.doneY,C.invTotal||null)}</td><td class="l">${bar(C.doneY,C.invTotal,"b-inv")}</td><td class="l">${bar(C.doneY,C.hasAdmin?C.adminTotal:0,"b-adm")}</td></tr></tfoot></table></div></div>`;
+  // chatter daily targets
+  if(live){
+    if(!C.hasAdmin)h+=`<div class="hint">Set an Admin target for each page above and today's chatter targets appear here.</div>`;
+    else{const CT=chatterTargets(C),u=ukParts();
+      h+=`<div class="panel"><div class="panel-head"><div><div class="eyebrow">Daily targets for chatters</div><h2 style="margin-top:4px">${fmt(u.date,{weekday:"long",day:"numeric",month:"long"})}</h2></div><span class="note">Each page's target for today, shared equally between the shifts covering it on today's line up</span></div>
+      <div class="team-cards">${CT.shifts.map(sft=>{const rows=[...sft.rows.values()].sort((a,b)=>b.total-a.total),tot=rows.reduce((a,x)=>a+x.total,0);
+        return `<div class="team-card${liveShifts().some(x=>x.title===sft.title)?" live":""}"><div class="tc-top"><span class="tc-title">${esc(sft.title)}</span><span class="tc-sum">${money(tot,0)}</span></div>
+          ${rows.map(x=>`<div class="ct-row"><div><b>${esc(x.name)}</b><div class="note">${x.pages.map(p=>esc(p.name)+" "+money(p.amt,0)).join(" · ")}</div></div><span class="ct-amt">${money(x.total,0)}</span></div>`).join("")}</div>`}).join("")||`<div class="note">Today's line up has no shifts covering these pages yet.</div>`}</div>
+      ${CT.unplaced.length?`<p class="note" style="margin:12px 0 0">Not on today's line up, so not given to a chatter: ${CT.unplaced.map(m=>`<b>${esc(m.name)}</b> (${money(m.dailyAdmin,0)})`).join(", ")}. Page names must match the Shift Line Up exactly.</p>`:""}</div>`}
+  }
+  h+=`<p class="note">Inviolable target = last month's total plus an uplift: <b>+20%</b> for pages that made $5,000 or less, <b>+10%</b> for $5,001 to $19,999, <b>+5%</b> for $20,000 and over.</p><p class="note" style="margin-top:-12px">Today's target = (Admin target − sales from the 1st to yesterday) ÷ days left including today. A good day lowers tomorrow's target and a weak day raises it.</p></div>`;
+  box.innerHTML=h;
+}
+
+/* ---------- CONTENT REQUEST ---------- */
+S.cr=[];S.crLoaded=false;
+function saveCR(tables){S.cr=tables;if(!S.db)return;queue("cr",()=>S.db.doc("content/requests").set({tables:JSON.parse(JSON.stringify(tables))}))}
+const crClone=()=>JSON.parse(JSON.stringify(S.cr));
+const todayNice=()=>fmt(ukParts().date,{day:"numeric",month:"short",year:"numeric"});
+function crVisible(t){const f=$("#cr-filter").value;return t.rows.map((r,i)=>({r,i})).filter(x=>f==="all"||!x.r.done)}
+function renderContent(){
+  const g=$("#cr-grid");if(!g||S.tEditing)return;$("#cr-add").disabled=S.readOnly;
+  if(!S.crLoaded&&S.db){g.innerHTML=`<div class="empty-state">Loading…</div>`;return}
+  const all=S.cr.flatMap(t=>t.rows.filter(r=>r.t.trim())),open=all.filter(r=>!r.done);
+  const busiest=S.cr.map(t=>({t,n:t.rows.filter(r=>r.t.trim()&&!r.done).length})).sort((a,b)=>b.n-a.n)[0];
+  $("#cr-stats").innerHTML=`<div class="stat"><span class="l">Open requests</span><span class="v">${open.length}</span><span class="l">across ${S.cr.length} page${S.cr.length===1?"":"s"}</span></div>
+    <div class="stat"><span class="l">Received</span><span class="v good">${all.length-open.length}</span><span class="l">ticked as done</span></div>
+    <div class="stat"><span class="l">Most waiting</span><span class="v" style="font-size:26px">${busiest&&busiest.n?esc(busiest.t.page||"Untitled"):"—"}</span><span class="l">${busiest&&busiest.n?busiest.n+" open request"+(busiest.n===1?"":"s"):"Nothing outstanding"}</span></div>
+    <div class="stat"><span class="l">Pages with nothing open</span><span class="v">${S.cr.filter(t=>!t.rows.some(r=>r.t.trim()&&!r.done)).length}</span><span class="l">all caught up</span></div>`;
+  g.innerHTML=S.cr.length?S.cr.map((t,ti)=>{const vis=crVisible(t),openN=t.rows.filter(r=>r.t.trim()&&!r.done).length;
+    return `<div class="cr-card"><div class="cr-head"><span class="cr-title" data-crtitle="${ti}" title="Click to rename">${esc(t.page)||"Untitled page"}</span><span style="display:flex;align-items:center;gap:8px"><span class="cr-count">${openN} open</span>${S.readOnly?"":`<button class="mini" data-crdel="${ti}" title="Remove this table">✕</button>`}</span></div>
+      <table class="cr-t"><thead><tr><th class="tk"></th><th>Content request</th><th>Date requested</th><th class="x"></th></tr></thead><tbody>${
+        vis.map(({r,i},vi)=>`<tr class="${r.done?"done":""}"><td class="tk"><button class="tick${r.done?" on":""}" data-crtick="${ti}:${i}" aria-label="${r.done?"Mark as not received":"Mark as received"}"${S.readOnly?" disabled":""}>${TICK}</button></td>
+          <td class="rq" data-gt="cr-${ti}" data-r="${vi}" data-c="0">${esc(r.t)||'<span class="ph">Type the request</span>'}</td><td class="dtc" data-gt="cr-${ti}" data-r="${vi}" data-c="1">${esc(r.d)}</td>
+          <td class="x">${S.readOnly?"":`<button class="mini" data-crrow="${ti}:${i}" title="Remove">✕</button>`}</td></tr>`).join("")||`<tr><td colspan="4" class="note" style="padding:14px 12px">No ${$("#cr-filter").value==="all"?"":"open "}requests for this page.</td></tr>`}</tbody></table>
+      <div class="cr-foot">${S.readOnly?"":`<button class="btn ghost sm" data-cradd="${ti}">+ Add request</button>`}</div></div>`}).join("")
+    :`<div class="empty-state">No page tables yet. Click <b>+ Add page table</b> to start one for a creator.</div>`;
+}
+function CRAdapter(ti){
+  const t=()=>S.cr[ti],vis=()=>t()?crVisible(t()):[];
+  return {rows:()=>Math.max(1,vis().length),cols:()=>2,
+    get(r,c){const x=vis()[r];return x?(c===0?x.r.t:x.r.d):""},
+    set(ch){const T=crClone();if(!T[ti])return;const v0=crVisible(T[ti]);
+      ch.forEach(({r,c,v})=>{if(c>1)return;v=String(v).trim();let row=v0[r]?T[ti].rows[v0[r].i]:null;
+        if(!row){if(!v)return;row={t:"",d:todayNice(),done:false};T[ti].rows.push(row);v0[r]={r:row,i:T[ti].rows.length-1}}
+        if(c===0)row.t=v;else row.d=v});
+      saveCR(T);renderContent()},
+    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c,x=vis()[r];if(!x)return;const cur=c===0?x.r.t:x.r.d,idx=x.i;
+      textEdit(el,cur,i,(v,dr)=>{const T=crClone();const row=T[ti]&&T[ti].rows[idx];
+        if(row){if(v!=null){if(c===0)row.t=v;else row.d=v}
+          const blank=!row.t.trim();if(blank&&c===0&&dr!==1&&v==null&&!cur)T[ti].rows.splice(idx,1);
+          let nextIdx=null;if(dr===1&&c===0&&row.t.trim()&&idx===T[ti].rows.length-1){T[ti].rows.push({t:"",d:todayNice(),done:false});nextIdx=T[ti].rows.length-1}
+          saveCR(T);renderContent();
+          if(nextIdx!=null){const vr=crVisible(S.cr[ti]).findIndex(q=>q.i===nextIdx);const n=gCell("cr-"+ti,vr,0);if(n){gSet("cr-"+ti,{r:vr,c:0});gPaint();CRAdapter(ti).edit(n);return}}
+        }else renderContent();
+        gPaint()})}};
+}
+$("#cr-filter").addEventListener("change",()=>{gClear();renderContent()});
+$("#cr-add").onclick=()=>{const T=crClone();T.push({id:uid("c"),page:"",rows:[{t:"",d:todayNice(),done:false}]});saveCR(T);renderContent();const el=document.querySelector(`[data-crtitle="${T.length-1}"]`);if(el)crTitleEdit(el)};
+function crTitleEdit(el){const ti=+el.dataset.crtitle,cur=S.cr[ti].page||"";textEdit(el,cur,cur?null:"",v=>{if(v!=null){const T=crClone();T[ti].page=v;saveCR(T)}renderContent()})}
+$("#cr-grid").addEventListener("click",e=>{
+  if(S.readOnly)return;
+  const ti=e.target.closest("[data-crtitle]");if(ti&&!ti.isContentEditable){crTitleEdit(ti);return}
+  const tk=e.target.closest("[data-crtick]");if(tk){const [a,b]=tk.dataset.crtick.split(":").map(Number),T=crClone();T[a].rows[b].done=!T[a].rows[b].done;saveCR(T);gClear();renderContent();return}
+  const ad=e.target.closest("[data-cradd]");if(ad){const a=+ad.dataset.cradd,T=crClone();T[a].rows.push({t:"",d:todayNice(),done:false});saveCR(T);renderContent();const vr=crVisible(S.cr[a]).length-1,n=gCell("cr-"+a,vr,0);if(n){gSet("cr-"+a,{r:vr,c:0});gPaint();CRAdapter(a).edit(n)}return}
+  const rw=e.target.closest("[data-crrow]");if(rw){const [a,b]=rw.dataset.crrow.split(":").map(Number),T=crClone();T[a].rows.splice(b,1);saveCR(T);gClear();renderContent();return}
+  const dl=e.target.closest("[data-crdel]");if(dl){if(!dl.classList.contains("armed")){dl.classList.add("armed");dl.textContent="Remove table?";setTimeout(()=>{if(dl.isConnected){dl.classList.remove("armed");dl.textContent="✕"}},3000);return}
+    const T=crClone();T.splice(+dl.dataset.crdel,1);saveCR(T);gClear();renderContent();toast("Table removed")}
+});
+
 /* ---------- adapters: how each table reads/writes cells ---------- */
 function FanAdapter(){
   const nd=monthDays(S.fanMonth);
@@ -1589,6 +2065,10 @@ function adapter(tid){
   if(!tid)return null;
   if(tid==="fan")return FanAdapter();
   if(tid==="perf")return PerfAdapter();
+  if(tid==="dev")return DevAdapter();
+  if(tid==="devbase")return DevBaseAdapter();
+  if(tid==="devadm"||tid==="tgt")return DevAdmAdapter(tid);
+  if(tid.startsWith("cr-"))return CRAdapter(+tid.slice(3));
   if(tid==="hire")return HireAdapter();
   if(tid==="chk")return ChecklistAdapter();
   if(tid==="sales")return SalesAdapter();
@@ -1649,11 +2129,11 @@ document.addEventListener("mouseover",e=>{
   const q=gPos(td);if(G.down&&(q.r!==G.down.p.r||q.c!==G.down.p.c))G.down.moved=true;
   G.ranges[G.ranges.length-1].f=q;gPaint();
 });
-const QUICK=new Set(["roster","chk","notes","sales"]); // tables where one click starts typing
+const QUICK=new Set(["roster","chk","notes","sales","devbase","devadm","tgt"]);const QUICKP=["cr-"]; // tables where one click starts typing
 document.addEventListener("mouseup",()=>{
   G.drag=false;const d=G.down;G.down=null;
   if(!d||d.moved||S.readOnly)return;
-  if(!(QUICK.has(d.tid)||d.wasAnchor))return;
+  if(!(QUICK.has(d.tid)||QUICKP.some(p=>d.tid.startsWith(p))||d.wasAnchor))return;
   setTimeout(()=>{if(gEditing())return;const ad=adapter(d.tid),el=gCell(d.tid,d.p.r,d.p.c);if(ad&&el)ad.edit(el)},0);
 });
 document.addEventListener("keydown",e=>{
@@ -1713,15 +2193,17 @@ document.addEventListener("paste",e=>{
 });
 
 /* ---------- data ---------- */
-function renderAll(){renderHome();renderLineup();renderChatters();renderChecklist();renderFans();renderPerf();renderHire();tick();gPaint()}
+function renderAll(){renderHome();renderLineup();renderChatters();renderChecklist();renderFans();renderPerf();renderHire();renderDevTable();renderDevReview();renderDevTargets();renderContent();tick();gPaint()}
 async function boot(){
   S.day=todayKey();S.days[S.day]=S.shifts=[];
   route();tick();renderAll();
   const db=await (window.claude&&window.claude.use?window.claude.use("db"):null);
-  if(!db){S.loaded=S.boardLoaded=S.fanLoaded=S.fanPagesLoaded=S.ckTplLoaded=S.ckLoaded=S.perfLoaded=S.hireLoaded=true;DAYS.forEach(d=>S.loadedDays.add(d.k));renderAll();$("#ch-body").innerHTML=`<tr><td colspan="5" class="empty-state">Team data isn't available in this view.</td></tr>`;return}
+  if(!db){S.loaded=S.boardLoaded=S.fanLoaded=S.fanPagesLoaded=S.ckTplLoaded=S.ckLoaded=S.perfLoaded=S.hireLoaded=S.devLoaded=S.devModelsLoaded=S.crLoaded=true;DAYS.forEach(d=>S.loadedDays.add(d.k));renderAll();$("#ch-body").innerHTML=`<tr><td colspan="5" class="empty-state">Team data isn't available in this view.</td></tr>`;return}
   S.db=db;
   db.doc("fans/pages").onSnapshot(sn=>guard("fanpages",()=>{S.fanPages=(sn.exists&&sn.data().list)||[];S.fanPagesLoaded=true;if(!S.fEditing){renderFans();gPaint()}}),()=>{});
-  subFans();subSales();subPerf();subHire();
+  subFans();subSales();subPerf();subHire();subDev();
+  db.doc("dev/models").onSnapshot(sn=>guard("devmodels",()=>{S.devModels=(sn.exists&&sn.data().list)||[];S.devModelsLoaded=true;if(!S.tEditing)renderDev()}),()=>{});
+  db.doc("content/requests").onSnapshot(sn=>guard("cr",()=>{S.cr=((sn.exists&&sn.data().tables)||[]).map(t=>({id:t.id,page:t.page||"",rows:(t.rows||[]).map(r=>({t:r.t||"",d:r.d||"",done:!!r.done}))}));S.crLoaded=true;if(!S.tEditing){renderContent();gPaint()}}),()=>{});
   db.doc("checklist/template").onSnapshot(sn=>guard("cktpl",()=>{S.ckItems=(sn.exists&&sn.data().items)||[];S.ckTplLoaded=true;if(!S.kEditing){renderChecklist();gPaint()}}),()=>{});
   subChecks();
   db.collection("chatters").onSnapshot(sn=>{S.chatters=new Map(sn.docs.map(d=>[d.id,d.data()]));S.loaded=true;renderAll()},()=>{});
