@@ -563,6 +563,21 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
 .tc-sum{font-family:var(--display);font-weight:400;font-size:20px}
 .ct-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
 .ct-amt{font-family:var(--display);font-size:16px;font-weight:500;white-space:nowrap}
+
+/* attendance */
+.hire.att th{background:var(--sheet-head)}
+.hire.att td.desc{text-align:left;white-space:normal;min-width:220px}
+.hire.att td.dte{font-family:var(--mono);font-size:12px;color:var(--ink-2);white-space:nowrap}
+.pill-sel.v-absent,.pill-sel.v-nonotice{background-color:var(--bad-soft);color:var(--bad)}
+.pill-sel.v-leave{background-color:var(--gm-bg);color:var(--gm)}
+.pill-sel.v-valid{background-color:var(--good-soft);color:var(--good)}
+.att-dash{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+.att-dash th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600;text-align:center;padding:9px 12px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.att-dash td{padding:9px 12px;text-align:center;border-bottom:1px solid var(--line)}
+.att-dash tr:last-child td{border-bottom:0}
+.att-dash .l{text-align:left}.att-dash td.nm{font-weight:600}
+.att-dash td.z{color:var(--ink-3)}
+.att-dash .n-bad{color:var(--bad);font-weight:700}
 .empty-state{padding:26px;text-align:center;color:var(--ink-2)}
 .note{font-size:12px;color:var(--ink-3)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:9px;font-weight:500;z-index:50}
@@ -611,7 +626,7 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
       <a href="#fans-new" data-view="fans"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Fan Count</a>
       <div class="subnav"><a href="#fans-new" data-view="fans-new">New Subs</a><a href="#fans-total" data-view="fans-total">Total Subs</a></div>
       <a href="#hr-perf" data-view="hr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6.5" width="17" height="13" rx="2"/><path d="M9 6.5V5a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0115 5v1.5M3.5 12h17M11 12v2h2v-2"/></svg>Human Resource</a>
-      <div class="subnav"><a href="#hr-hire" data-view="hr-hire">Hiring &amp; Firing</a><a href="#hr-perf" data-view="hr-perf">Performance Evaluation</a></div>
+      <div class="subnav"><a href="#hr-hire" data-view="hr-hire">Hiring &amp; Firing</a><a href="#hr-perf" data-view="hr-perf">Performance Evaluation</a><a href="#hr-attend" data-view="hr-attend">Attendance Record</a></div>
       <a href="#dev-table" data-view="dev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 17.5l5.5-6 4 3.5 7.5-8.5"/><path d="M15.5 6.5h5v5"/><path d="M3.5 20.5h17"/></svg>Development Tracking</a>
       <div class="subnav"><a href="#dev-table" data-view="dev-table">Development Table</a><a href="#dev-review" data-view="dev-review">Business Review</a><a href="#dev-targets" data-view="dev-targets">Business Targets</a></div>
       <a href="#content" data-view="content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l4.5-4 3.5 3 3-2.5 5 4"/></svg>Content Request</a>
@@ -746,6 +761,24 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
       <p class="note">Rules apply automatically: a Failed step fails every later step and the outcome. A Terminated outcome sets every step to N/A. Locked cells are marked with a dotted outline.</p>
     </section>
 
+    <!-- HR: ATTENDANCE -->
+    <section class="view" id="v-attend" hidden>
+      <div class="head">
+        <div><div class="eyebrow">Human Resource</div><h1>Attendance Record</h1></div>
+        <div class="toolbar">
+          <div class="seg"><button class="btn" id="am-prev" aria-label="Previous month">←</button><span class="btn month" id="am-label"></span><button class="btn" id="am-next" aria-label="Next month">→</button></div>
+          <button class="btn primary" id="att-add">+ Add record</button>
+        </div>
+      </div>
+      <div class="stats" id="att-stats"></div>
+      <div class="panel" style="padding:0;overflow:hidden">
+        <div class="panel-head" style="padding:16px 20px 0"><div><div class="eyebrow">This month by chatter</div><h2 style="margin-top:4px" id="att-dash-title"></h2></div><span class="note">Sorted by absences without notice</span></div>
+        <div class="tgt-wrap"><table class="att-dash" id="att-dash"></table></div>
+      </div>
+      <div class="tbl-wrap"><table class="hire att" id="att-table"></table></div>
+      <p class="note">One row per absence or leave. Click a cell to type; the date fills in with today and can be changed. Names are matched as typed, so keep each chatter's spelling the same.</p>
+    </section>
+
     <!-- DEVELOPMENT TABLE -->
     <section class="view wide" id="v-devt" hidden>
       <div class="head">
@@ -760,7 +793,7 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
       <form class="toolbar dev-add" id="dev-add" hidden>
         <input id="dev-add-names" placeholder="Add models, separated by commas, e.g. Hannah, Sophia, Shae" aria-label="Model names to add" style="flex:1 1 320px">
         <button class="btn primary" type="submit">Add models</button>
-        <span class="note">Double-click a model's name to rename it. ✕ removes the model and its figures.</span>
+        <span class="note">Double-click a model's name to rename it. ✕ removes the model from this month only; other months keep it.</span>
       </form>
       <div class="dev-wrap"><table class="devt" id="dev-table"></table></div>
       <p class="note">Click a cell and paste straight from your sheet (Ctrl+V). Average is per day with sales entered. Last month comes from what was entered for that month; if nothing was entered, type last month's total in the “Last month” row. The Inviolable target is last month plus an uplift (20% for pages that made $5,000 or less, 10% for $5,001 to $19,999, 5% for $20,000 and over) and can't be changed. The Admin target is yours to set. Average diff compares this month with the same days of last month plus 5%.</p>
@@ -900,13 +933,13 @@ function allTitles(){const t=new Set();DAYS.forEach(d=>(S.days[d.k]||[]).forEach
 /* ---------- routing ---------- */
 function route(){
   const v=(location.hash||"#home").slice(1);
-  const view=["home","lineup","chatters","checklist","fans-new","fans-total","hr-hire","hr-perf","dev-table","dev-review","dev-targets","content","data"].includes(v)?v:"home";
-  const sec=view.startsWith("fans")?"fans":view==="hr-hire"?"hire":view==="hr-perf"?"perf":view==="dev-table"?"devt":view==="dev-review"?"devr":view==="dev-targets"?"devg":view;
+  const view=["home","lineup","chatters","checklist","fans-new","fans-total","hr-hire","hr-perf","hr-attend","dev-table","dev-review","dev-targets","content","data"].includes(v)?v:"home";
+  const sec=view.startsWith("fans")?"fans":view==="hr-hire"?"hire":view==="hr-perf"?"perf":view==="hr-attend"?"attend":view==="dev-table"?"devt":view==="dev-review"?"devr":view==="dev-targets"?"devg":view;
   document.querySelectorAll(".view").forEach(s=>s.hidden=s.id!=="v-"+sec);
-  document.querySelectorAll(".nav a").forEach(a=>{if(a.dataset.view===view||(a.dataset.view==="fans"&&sec==="fans")||(a.dataset.view==="hr"&&(sec==="hire"||sec==="perf"))||(a.dataset.view==="dev"&&(sec==="devt"||sec==="devr"||sec==="devg")))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  document.querySelectorAll(".nav a").forEach(a=>{if(a.dataset.view===view||(a.dataset.view==="fans"&&sec==="fans")||(a.dataset.view==="hr"&&(sec==="hire"||sec==="perf"||sec==="attend"))||(a.dataset.view==="dev"&&(sec==="devt"||sec==="devr"||sec==="devg")))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   gClear();
   if(sec==="fans"){const k=view==="fans-total"?"total":"new";if(k!==S.fanKind){S.fanKind=k;subFans()}renderFans()}
-  if(sec==="perf")renderPerf();if(sec==="hire")renderHire();if(sec==="devt")renderDevTable();if(sec==="devr")renderDevReview();if(sec==="devg")renderDevTargets();if(sec==="content")renderContent();
+  if(sec==="perf")renderPerf();if(sec==="hire")renderHire();if(sec==="attend")renderAttend();if(sec==="devt")renderDevTable();if(sec==="devr")renderDevReview();if(sec==="devg")renderDevTargets();if(sec==="content")renderContent();
   window.scrollTo(0,0);
 }
 addEventListener("hashchange",route);
@@ -1688,6 +1721,59 @@ const hmGo=n=>{S.hireMonth=shiftMonth(S.hireMonth,n);gClear();subHire();renderHi
 $("#hm-prev").onclick=()=>hmGo(-1);$("#hm-next").onclick=()=>hmGo(1);
 
 
+
+/* ---- attendance record (monthly) ---- */
+const AT_TYPES=["Absent","Leave"],AT_NOTICE=["No Notice","Valid"],AKEYS=["d","name","type","notice","desc"];
+S.att=[];S.attLoaded=false;S.attMonth=ukParts().date.slice(0,7);
+let unAtt=null;
+function subAtt(){
+  if(!S.db)return;if(unAtt)unAtt();S.attLoaded=false;const m=S.attMonth;
+  unAtt=S.db.doc("attend/"+m).onSnapshot(sn=>guard("att",()=>{if(m!==S.attMonth)return;if(sn.exists)existing.add("attend/"+m);
+    S.att=((sn.exists&&sn.data().rows)||[]).map(r=>Object.fromEntries(AKEYS.map(k=>[k,r&&r[k]!=null?String(r[k]):""])));S.attLoaded=true;if(!S.tEditing){renderAttend();gPaint()}}),()=>{});
+}
+function saveAtt(rows){const m=S.attMonth;S.att=rows;if(!S.db)return;queue("att",()=>S.db.doc("attend/"+m).set({month:m,rows:rows.map(r=>({...r}))}))}
+function renderAttend(){
+  const t=$("#att-table");if(!t||S.tEditing)return;
+  const [y,mo]=S.attMonth.split("-").map(Number),mn=MONTHS[mo-1];$("#am-label").textContent=mn+" "+y;$("#att-add").disabled=S.readOnly;$("#att-dash-title").textContent=mn+" "+y;
+  if(!S.attLoaded&&S.db){t.innerHTML=`<tbody><tr><td class="empty-state">Loading…</td></tr></tbody>`;$("#att-stats").innerHTML="";$("#att-dash").innerHTML="";return}
+  const rows=S.att,real=rows.filter(r=>r.name.trim()),is=(r,k,v)=>pick(k==="type"?AT_TYPES:AT_NOTICE,r[k])===v;
+  const nAbs=real.filter(r=>is(r,"type","Absent")).length,nLv=real.filter(r=>is(r,"type","Leave")).length,nNo=real.filter(r=>is(r,"notice","No Notice")).length,nVal=real.filter(r=>is(r,"notice","Valid")).length;
+  const by=new Map();real.forEach(r=>{const k=norm(r.name);if(!by.has(k))by.set(k,{name:r.name.trim(),abs:0,lv:0,no:0,val:0,n:0,absNo:0});const o=by.get(k);o.n++;if(is(r,"type","Absent"))o.abs++;if(is(r,"type","Leave"))o.lv++;if(is(r,"notice","No Notice"))o.no++;if(is(r,"notice","Valid"))o.val++;if(is(r,"type","Absent")&&is(r,"notice","No Notice"))o.absNo++});
+  const list=[...by.values()].sort((a,b)=>b.absNo-a.absNo||b.no-a.no||b.abs-a.abs||b.n-a.n||a.name.localeCompare(b.name));
+  const worst=list[0];
+  $("#att-stats").innerHTML=`<div class="stat"><span class="l">Absences</span><span class="v bad">${nAbs}</span><span class="l">${by.size?[...by.values()].filter(o=>o.abs).length+" chatter"+([...by.values()].filter(o=>o.abs).length===1?"":"s"):"None recorded"}</span></div>
+    <div class="stat"><span class="l">Leaves</span><span class="v">${nLv}</span><span class="l">${[...by.values()].filter(o=>o.lv).length} chatter${[...by.values()].filter(o=>o.lv).length===1?"":"s"}</span></div>
+    <div class="stat"><span class="l">No notice</span><span class="v bad">${nNo}</span><span class="l">${nVal} valid</span></div>
+    <div class="stat"><span class="l">Most to watch</span><span class="v" style="font-size:26px">${worst&&(worst.no||worst.abs)?esc(worst.name):"—"}</span><span class="l">${worst&&(worst.no||worst.abs)?`${worst.abs} absent · ${worst.no} without notice`:"Nobody flagged"}</span></div>`;
+  const cell=(n,bad)=>`<td class="${n?(bad?"n-bad":""):"z"}">${n||"–"}</td>`;
+  $("#att-dash").innerHTML=list.length?`<thead><tr><th class="l">Chatter</th><th>Absent</th><th>Leave</th><th>No notice</th><th>Valid</th><th>Total</th><th class="l">Flag</th></tr></thead><tbody>${list.map(o=>`<tr><td class="l nm">${esc(o.name)}</td>${cell(o.abs,o.abs>=3)}${cell(o.lv)}${cell(o.no,true)}${cell(o.val)}<td><b>${o.n}</b></td><td class="l">${o.absNo>=2?'<span class="pill p-left">Absent without notice ×'+o.absNo+'</span>':o.no>=2?'<span class="pill p-left">Repeated no notice</span>':o.abs>=3?'<span class="pill p-trial">3+ absences</span>':o.no===1?'<span class="pill p-trial">One no notice</span>':'<span class="note">Fine</span>'}</td></tr>`).join("")}</tbody>`
+    :`<tbody><tr><td class="empty-state">Nobody absent or on leave in ${mn} so far.</td></tr></tbody>`;
+  const sel=(r,k,opts,val)=>{const v=pick(opts,val)||"";return `<select class="pill-sel ${vcls(v)}" data-arow="${r}" data-akey="${k}"${S.readOnly?" disabled":""}><option value="">—</option>${opts.map(o=>`<option${o===v?" selected":""}>${o}</option>`).join("")}</select>`};
+  let h=`<thead><tr><th>Date</th><th>Chatter</th><th>Absent / Leave</th><th>Notice</th><th>Description</th><th class="x"></th></tr></thead><tbody>`;
+  h+=rows.map((r,i)=>`<tr><td class="dte" data-gt="att" data-r="${i}" data-c="0">${esc(r.d)}</td><td class="nm" data-gt="att" data-r="${i}" data-c="1">${esc(r.name)||'<span class="ph">Chatter name</span>'}</td>
+    <td data-gt="att" data-r="${i}" data-c="2">${sel(i,"type",AT_TYPES,r.type)}</td><td data-gt="att" data-r="${i}" data-c="3">${sel(i,"notice",AT_NOTICE,r.notice)}</td>
+    <td class="desc" data-gt="att" data-r="${i}" data-c="4">${esc(r.desc)}</td><td class="x">${S.readOnly?"":`<button class="mini" data-adel="${i}" title="Remove row">✕</button>`}</td></tr>`).join("");
+  if(!rows.length)h+=`<tr><td colspan="6" class="empty-state">No records for ${mn} yet. Click <b>+ Add record</b>.</td></tr>`;
+  t.innerHTML=h+"</tbody>";
+}
+function AttAdapter(){
+  return {rows:()=>S.att.length,cols:()=>5,
+    get(r,c){const row=S.att[r];return row?row[AKEYS[c]]||"":""},
+    set(ch){const rows=S.att.map(x=>({...x}));let n=0,bad=0;
+      ch.forEach(({r,c,v})=>{if(c>4)return;v=String(v).trim();let val=v;if((c===2||c===3)&&v){val=pick(c===2?AT_TYPES:AT_NOTICE,v);if(!val){bad++;return}}
+        while(rows.length<=r){if(!v)return;rows.push({d:todayNice(),name:"",type:"",notice:"",desc:""})}rows[r][AKEYS[c]]=val;n++});
+      if(bad)toast(`Skipped ${bad} value${bad===1?"":"s"} that aren't dropdown options`);if(n)saveAtt(rows);renderAttend()},
+    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c;if(c===2||c===3){const s=el.querySelector("select");if(s){s.focus();try{s.showPicker()}catch(e){}}return}
+      const k=AKEYS[c],cur=S.att[r]?.[k]||"";textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null&&S.att[r]){const rows=S.att.map(x=>({...x}));rows[r][k]=v;saveAtt(rows)}afterEdit("att",r,c,0,dc,renderAttend)})}};
+}
+$("#att-table").addEventListener("change",e=>{const s=e.target.closest("[data-akey]");if(!s)return;const rows=S.att.map(x=>({...x})),r=+s.dataset.arow;if(!rows[r])return;rows[r][s.dataset.akey]=s.value;saveAtt(rows);renderAttend();gPaint()});
+$("#att-table").addEventListener("click",e=>{const b=e.target.closest("[data-adel]");if(!b||S.readOnly)return;
+  if(!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Remove?";setTimeout(()=>{if(b.isConnected){b.classList.remove("armed");b.textContent="✕"}},3000);return}
+  const rows=S.att.map(x=>({...x}));rows.splice(+b.dataset.adel,1);saveAtt(rows);gClear();renderAttend()});
+$("#att-add").onclick=()=>{const rows=S.att.map(x=>({...x}));rows.push({d:todayNice(),name:"",type:"Absent",notice:"",desc:""});saveAtt(rows);renderAttend();const r=rows.length-1;gSet("att",{r,c:1});gPaint();const el=gCell("att",r,1);if(el)AttAdapter().edit(el)};
+const amGo=n=>{S.attMonth=shiftMonth(S.attMonth,n);gClear();subAtt();renderAttend()};
+$("#am-prev").onclick=()=>amGo(-1);$("#am-next").onclick=()=>amGo(1);
+
 /* ---------- DEVELOPMENT TRACKING ---------- */
 S.devMonth=ukParts().date.slice(0,7);S.devModels=[];S.dev={};S.devLoaded=false;S.devModelsLoaded=false;S.devEdit=false;
 let unDev=null;
@@ -1698,7 +1784,26 @@ function subDev(){
   }),()=>{});
 }
 function renderDev(){renderDevTable();renderDevReview();renderDevTargets();gPaint()}
-function saveDevModels(list){S.devModels=list;if(!S.db)return;queue("devmodels",()=>S.db.doc("dev/models").set({list}))}
+// Each month keeps its own list of models. A month with no list of its own uses the default list
+// plus any model that has figures in that month, so removing a model in one month never hides it in another.
+S.devNames={};
+function devHasData(doc,id){const o=(doc&&doc.v&&doc.v[id])||{};return Object.values(o).some(x=>numOrNull(x)!=null)}
+function devModelsFor(ym){
+  const doc=S.dev[ym];if(doc&&Array.isArray(doc.models))return doc.models;
+  const list=S.devModels.slice(),have=new Set(list.map(m=>m.id));
+  Object.keys((doc&&doc.v)||{}).forEach(id=>{if(!have.has(id)&&S.devNames[id]&&devHasData(doc,id))list.push({id,name:S.devNames[id]})});
+  return list;
+}
+function saveDevModels(list){ // saves the list for the month being viewed only
+  const ym=S.devMonth,pm=shiftMonth(ym,-1),pd=S.dev[pm];
+  if(pd&&!Array.isArray(pd.models)){const keep=devModelsFor(pm);pd.models=keep;if(S.db)queue("dev",()=>upsert("dev/"+pm,{models:keep},{month:pm}))} // freeze last month's list as it is now
+  const d=S.dev[ym]=S.dev[ym]||{month:ym,v:{}};d.models=list;
+  list.forEach(m=>S.devNames[m.id]=m.name);S.devModels.forEach(m=>{if(!S.devNames[m.id])S.devNames[m.id]=m.name});
+  const isLatest=ym>=ukParts().date.slice(0,7);if(isLatest)S.devModels=list.slice(); // new months start from the latest list
+  if(!S.db)return;
+  queue("dev",()=>upsert("dev/"+ym,{models:list},{month:ym}));
+  const def=S.devModels.slice(),names={...S.devNames};queue("devmodels",()=>S.db.doc("dev/models").set({list:def,names}));
+}
 function saveDevVals(patch){const ym=S.devMonth;const d=S.dev[ym]=S.dev[ym]||{month:ym,v:{}};d.v=d.v||{};
   Object.entries(patch).forEach(([id,o])=>d.v[id]=Object.assign({},d.v[id],o));if(!S.db)return;queue("dev",()=>upsert("dev/"+ym,{v:patch},{month:ym}))}
 function saveDevAdmin(patch){const ym=S.devMonth;const d=S.dev[ym]=S.dev[ym]||{month:ym,v:{}};d.admin=Object.assign({},d.admin,patch);if(!S.db)return;queue("dev",()=>upsert("dev/"+ym,{admin:patch},{month:ym}))}
@@ -1711,7 +1816,10 @@ function devCalc(){
   const ym=S.devMonth,prev=shiftMonth(ym,-1),nd=monthDays(ym),pnd=monthDays(prev),doc=S.dev[ym]||{};
   const cur=doc.v||{},pv=(S.dev[prev]||{}).v||{},base=doc.base||{},adm=doc.admin||{};
   const u=ukParts(),curYm=u.date.slice(0,7),isCur=curYm===ym,isPast=ym<curYm,today=isCur?+u.date.slice(8):0;
-  const raw=S.devModels.map(m=>{const vals=[],pvals=[];for(let d=1;d<=nd;d++)vals.push(numOrNull((cur[m.id]||{})[d]));for(let d=1;d<=pnd;d++)pvals.push(numOrNull((pv[m.id]||{})[d]));return {m,vals,pvals}});
+  const prevList=devModelsFor(prev),prevDoc=S.dev[prev];
+  const pvOf=m=>{ // last month's figures for this page: same page first, otherwise a page with the same name
+    if(devHasData(prevDoc,m.id))return pv[m.id];const tw=prevList.find(x=>x.id!==m.id&&norm(x.name)===norm(m.name)&&devHasData(prevDoc,x.id));return tw?pv[tw.id]:(pv[m.id]||{})};
+  const raw=devModelsFor(ym).map(m=>{const vals=[],pvals=[],po=pvOf(m)||{};for(let d=1;d<=nd;d++)vals.push(numOrNull((cur[m.id]||{})[d]));for(let d=1;d<=pnd;d++)pvals.push(numOrNull(po[d]));return {m,vals,pvals}});
   let lastDay=0;raw.forEach(r=>r.vals.forEach((x,i)=>{if(x!=null&&i+1>lastDay)lastDay=i+1}));
   const N=isPast?Math.min(nd,pnd):Math.min(lastDay,pnd);          // same-days window of last month
   const rem=isCur?nd-(today-1):isPast?0:nd;                        // days left including today
@@ -1770,7 +1878,7 @@ function renderDevTable(){
   t.innerHTML=h;
 }
 function DevAdapter(){
-  const nd=monthDays(S.devMonth),M=S.devModels;
+  const nd=monthDays(S.devMonth),M=devModelsFor(S.devMonth);
   return {rows:()=>nd,cols:()=>M.length+1,
     get(r,c){if(c>=M.length){const x=devCalc().daily[r];return x==null?"":String(Math.round(x*100)/100)}const x=numOrNull((((S.dev[S.devMonth]||{}).v||{})[M[c].id]||{})[r+1]);return x==null?"":String(x)},
     set(ch){const patch={};let bad=0;
@@ -1782,7 +1890,7 @@ function DevAdapter(){
       textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null)this.set([{r,c,v}]);afterEdit("dev",r,c,dr,dc,renderDev)})}};
 }
 function DevBaseAdapter(){
-  const M=S.devModels;
+  const M=devModelsFor(S.devMonth);
   return {rows:()=>1,cols:()=>M.length,
     get(r,c){const b=((S.dev[S.devMonth]||{}).base||{})[M[c]?.id];return numOrNull(b)==null?"":String(b)},
     set(ch){const patch={};ch.forEach(({c,v})=>{if(!M[c])return;const tx=String(v).replace(/[$£€,\s]/g,"");patch[M[c].id]=tx===""||isNaN(Number(tx))?null:Number(tx)});if(Object.keys(patch).length)saveDevBase(patch);renderDev()},
@@ -1790,7 +1898,7 @@ function DevBaseAdapter(){
 }
 function moneyIn(v){const tx=String(v).replace(/[$£€,\s]/g,"");return tx===""||isNaN(Number(tx))?null:Number(tx)}
 function DevAdmAdapter(tid){ // admin target cells: a row in the Development Table ("devadm") and a column in Business Targets ("tgt")
-  const M=S.devModels,row=tid==="devadm",ix=(r,c)=>row?c:r;
+  const M=devModelsFor(S.devMonth),row=tid==="devadm",ix=(r,c)=>row?c:r;
   return {rows:()=>row?1:M.length,cols:()=>row?M.length:1,
     get(r,c){const a=((S.dev[S.devMonth]||{}).admin||{})[M[ix(r,c)]?.id];return numOrNull(a)==null?"":String(a)},
     set(ch){const patch={};ch.forEach(({r,c,v})=>{const m=M[ix(r,c)];if(m&&(row?r===0:c===0))patch[m.id]=moneyIn(v)});if(Object.keys(patch).length)saveDevAdmin(patch);renderDev()},
@@ -1798,15 +1906,15 @@ function DevAdmAdapter(tid){ // admin target cells: a row in the Development Tab
 }
 $("#dev-table").addEventListener("dblclick",e=>{
   const th=e.target.closest("[data-devname]");
-  if(th&&!S.readOnly&&!e.target.closest("button")){const i=+th.dataset.devname,cur=S.devModels[i].name;textEdit(th,cur,null,v=>{if(v){const l=S.devModels.map(x=>({...x}));l[i].name=v;saveDevModels(l)}renderDev()});return}
+  if(th&&!S.readOnly&&!e.target.closest("button")){const i=+th.dataset.devname,L0=devModelsFor(S.devMonth),cur=L0[i].name;textEdit(th,cur,null,v=>{if(v){const l=L0.map(x=>({...x}));l[i].name=v;saveDevModels(l)}renderDev()});return}
   const td=e.target.closest('[data-gt="dev"],[data-gt="devbase"],[data-gt="devadm"]');if(td){const ad=adapter(td.dataset.gt);ad&&ad.edit(td)}
 });
 $("#dev-table").addEventListener("click",e=>{const b=e.target.closest("[data-devrm]");if(!b||S.readOnly)return;e.stopPropagation();
   if(!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Remove?";setTimeout(()=>{if(b.isConnected){b.classList.remove("armed");b.textContent="✕"}},3000);return}
-  const l=S.devModels.slice();l.splice(+b.dataset.devrm,1);saveDevModels(l);gClear();renderDev();toast("Model removed")});
+  const l=devModelsFor(S.devMonth).slice();l.splice(+b.dataset.devrm,1);saveDevModels(l);gClear();renderDev();toast("Removed from "+monName(S.devMonth)+" only")});
 $("#dev-edit").onclick=()=>{S.devEdit=!S.devEdit;renderDevTable();if(S.devEdit)$("#dev-add-names").focus()};
 $("#dev-add").addEventListener("submit",e=>{e.preventDefault();const names=$("#dev-add-names").value.split(/[,\n\t]+/).map(x=>x.trim()).filter(Boolean);if(!names.length)return;
-  const have=new Set(S.devModels.map(m=>norm(m.name)));const l=S.devModels.slice();let n=0;names.forEach(x=>{if(!have.has(norm(x))){have.add(norm(x));l.push({id:uid("m"),name:x});n++}});
+  const L0=devModelsFor(S.devMonth),have=new Set(L0.map(m=>norm(m.name)));const l=L0.slice();let n=0;names.forEach(x=>{if(!have.has(norm(x))){have.add(norm(x));l.push({id:uid("m"),name:x});n++}});
   saveDevModels(l);$("#dev-add-names").value="";renderDev();toast(n?`Added ${n} model${n===1?"":"s"}`:"Those models are already in the table")});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-devm]");if(!b)return;S.devMonth=shiftMonth(S.devMonth,+b.dataset.devm);gClear();subDev();renderDev()});
 
@@ -2065,6 +2173,7 @@ function adapter(tid){
   if(!tid)return null;
   if(tid==="fan")return FanAdapter();
   if(tid==="perf")return PerfAdapter();
+  if(tid==="att")return AttAdapter();
   if(tid==="dev")return DevAdapter();
   if(tid==="devbase")return DevBaseAdapter();
   if(tid==="devadm"||tid==="tgt")return DevAdmAdapter(tid);
@@ -2129,7 +2238,7 @@ document.addEventListener("mouseover",e=>{
   const q=gPos(td);if(G.down&&(q.r!==G.down.p.r||q.c!==G.down.p.c))G.down.moved=true;
   G.ranges[G.ranges.length-1].f=q;gPaint();
 });
-const QUICK=new Set(["roster","chk","notes","sales","devbase","devadm","tgt"]);const QUICKP=["cr-"]; // tables where one click starts typing
+const QUICK=new Set(["roster","chk","notes","sales","devbase","devadm","tgt","att"]);const QUICKP=["cr-"]; // tables where one click starts typing
 document.addEventListener("mouseup",()=>{
   G.drag=false;const d=G.down;G.down=null;
   if(!d||d.moved||S.readOnly)return;
@@ -2193,16 +2302,16 @@ document.addEventListener("paste",e=>{
 });
 
 /* ---------- data ---------- */
-function renderAll(){renderHome();renderLineup();renderChatters();renderChecklist();renderFans();renderPerf();renderHire();renderDevTable();renderDevReview();renderDevTargets();renderContent();tick();gPaint()}
+function renderAll(){renderHome();renderLineup();renderChatters();renderChecklist();renderFans();renderPerf();renderHire();renderAttend();renderDevTable();renderDevReview();renderDevTargets();renderContent();tick();gPaint()}
 async function boot(){
   S.day=todayKey();S.days[S.day]=S.shifts=[];
   route();tick();renderAll();
   const db=await (window.claude&&window.claude.use?window.claude.use("db"):null);
-  if(!db){S.loaded=S.boardLoaded=S.fanLoaded=S.fanPagesLoaded=S.ckTplLoaded=S.ckLoaded=S.perfLoaded=S.hireLoaded=S.devLoaded=S.devModelsLoaded=S.crLoaded=true;DAYS.forEach(d=>S.loadedDays.add(d.k));renderAll();$("#ch-body").innerHTML=`<tr><td colspan="5" class="empty-state">Team data isn't available in this view.</td></tr>`;return}
+  if(!db){S.loaded=S.boardLoaded=S.fanLoaded=S.fanPagesLoaded=S.ckTplLoaded=S.ckLoaded=S.perfLoaded=S.hireLoaded=S.attLoaded=S.devLoaded=S.devModelsLoaded=S.crLoaded=true;DAYS.forEach(d=>S.loadedDays.add(d.k));renderAll();$("#ch-body").innerHTML=`<tr><td colspan="5" class="empty-state">Team data isn't available in this view.</td></tr>`;return}
   S.db=db;
   db.doc("fans/pages").onSnapshot(sn=>guard("fanpages",()=>{S.fanPages=(sn.exists&&sn.data().list)||[];S.fanPagesLoaded=true;if(!S.fEditing){renderFans();gPaint()}}),()=>{});
-  subFans();subSales();subPerf();subHire();subDev();
-  db.doc("dev/models").onSnapshot(sn=>guard("devmodels",()=>{S.devModels=(sn.exists&&sn.data().list)||[];S.devModelsLoaded=true;if(!S.tEditing)renderDev()}),()=>{});
+  subFans();subSales();subPerf();subHire();subAtt();subDev();
+  db.doc("dev/models").onSnapshot(sn=>guard("devmodels",()=>{S.devModels=(sn.exists&&sn.data().list)||[];S.devNames=Object.assign({},sn.exists&&sn.data().names);S.devModels.forEach(m=>{if(!S.devNames[m.id])S.devNames[m.id]=m.name});S.devModelsLoaded=true;if(!S.tEditing)renderDev()}),()=>{});
   db.doc("content/requests").onSnapshot(sn=>guard("cr",()=>{S.cr=((sn.exists&&sn.data().tables)||[]).map(t=>({id:t.id,page:t.page||"",rows:(t.rows||[]).map(r=>({t:r.t||"",d:r.d||"",done:!!r.done}))}));S.crLoaded=true;if(!S.tEditing){renderContent();gPaint()}}),()=>{});
   db.doc("checklist/template").onSnapshot(sn=>guard("cktpl",()=>{S.ckItems=(sn.exists&&sn.data().items)||[];S.ckTplLoaded=true;if(!S.kEditing){renderChecklist();gPaint()}}),()=>{});
   subChecks();
