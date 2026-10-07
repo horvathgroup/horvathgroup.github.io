@@ -580,12 +580,18 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
 .att-dash .n-bad{color:var(--bad);font-weight:700}
 
 /* chatting ratio */
+.asof{display:inline-flex;align-items:center;gap:10px;margin:0 0 16px;padding:8px 8px 8px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;font-size:13px;max-width:100%}
+.asof span{font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.asof input{border:1px solid transparent;background:var(--surface-2);border-radius:8px;padding:7px 11px;font:inherit;font-weight:600;color:var(--ink);min-width:0;width:230px}
+.asof input:hover{border-color:var(--line)}.asof input:focus{outline:2px solid var(--accent);outline-offset:0;background:var(--surface)}
+.asof input::placeholder{font-weight:400;color:var(--ink-3)}
 .ratio{border-collapse:collapse;width:100%;min-width:720px;font-size:13px;font-variant-numeric:tabular-nums}
 .ratio th{background:var(--sheet-head);color:#fff;font-size:11.5px;font-weight:600;padding:10px 14px;text-align:right;white-space:nowrap}
 .ratio th small{display:block;font-weight:400;font-size:10px;opacity:.7}
 .ratio th.hl{background:var(--accent)}
 .ratio td{padding:9px 14px;text-align:right;border-bottom:1px solid var(--line);border-right:1px solid var(--line);white-space:nowrap}
 .ratio .l{text-align:left}.ratio td.nm{font-weight:600}
+.ratio td.v,.ratio td.nm{cursor:cell}.ratio td.x{width:1%;border-right:0;text-align:center;padding:6px 8px}.ratio th.x{width:1%}.ratio td.nm.need:empty::before{content:"Page name";color:var(--ink-3);font-weight:400}
 .ratio td.v{cursor:cell}.ratio td.v.need{color:var(--ink-3)}
 .ratio td[contenteditable="true"]{outline:2px solid var(--accent);outline-offset:-2px;background:var(--surface);cursor:text}
 .ratio td.hl{background:var(--accent-soft);font-family:var(--display);font-size:16px;font-weight:500;border-right:0}
@@ -840,13 +846,14 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
       <div class="head">
         <div><div class="eyebrow">Development Tracking</div><h1>Chatting Ratio</h1></div>
         <div class="toolbar">
-          <div class="seg"><button class="btn" data-devm="-1" aria-label="Previous month">←</button><span class="btn month dev-month"></span><button class="btn" data-devm="1" aria-label="Next month">→</button></div>
-          <a class="btn" href="#dev-table">Development Table</a>
+          <div class="seg"><button class="btn" id="rm-prev" aria-label="Previous month">←</button><span class="btn month" id="rm-label"></span><button class="btn" id="rm-next" aria-label="Next month">→</button></div>
+          <button class="btn primary" id="ratio-add">+ Add page</button>
         </div>
       </div>
+      <label class="asof"><span>As of the Date:</span><input id="ratio-asof" type="text" placeholder="e.g. 7 October 2026" maxlength="60" autocomplete="off"></label>
       <div class="stats" id="ratio-stats"></div>
       <div class="tbl-wrap"><table class="ratio" id="ratio-table"></table></div>
-      <p class="note">Chatting Ratio = (Tips + Messages) ÷ Net Subscription. It shows how many dollars the chatters bring in for every dollar of subscription. Click a cell to type, or paste a block from your sheet. Pages come from this month's Development Table.</p>
+      <p class="note">Chatting Ratio = (Tips + Messages) ÷ Subscription, shown as 1:N. For every $1 of subscription, the chatters bring in $N. This table is its own list: type the page names and figures here, or paste a block from your sheet. Each month has its own table.</p>
     </section>
 
     <!-- BUSINESS TARGETS -->
@@ -1821,7 +1828,7 @@ function subDev(){
     if(ym!==S.devMonth)return;const m={};sn.docs.forEach(d=>{m[d.id]=d.data();existing.add("dev/"+d.id)});S.dev=m;S.devLoaded=true;if(!S.tEditing)renderDev();
   }),()=>{});
 }
-function renderDev(){renderDevTable();renderDevReview();renderDevTargets();renderRatio();gPaint()}
+function renderDev(){renderDevTable();renderDevReview();renderDevTargets();gPaint()}
 // Each month keeps its own list of models. A month with no list of its own uses the default list
 // plus any model that has figures in that month, so removing a model in one month never hides it in another.
 S.devNames={};
@@ -2061,38 +2068,59 @@ function renderDevReview(){
 }
 
 
-/* ---- chatting ratio (monthly) ---- */
-const RKEYS=["sub","tips","msg"];
-function saveRatio(patch){const ym=S.devMonth;const d=S.dev[ym]=S.dev[ym]||{month:ym,v:{}};d.ratio=d.ratio||{};
-  Object.entries(patch).forEach(([id,o])=>d.ratio[id]=Object.assign({},d.ratio[id],o));if(!S.db)return;queue("dev",()=>upsert("dev/"+ym,{ratio:patch},{month:ym}))}
-function ratioRows(){const R=(S.dev[S.devMonth]||{}).ratio||{};return devModelsFor(S.devMonth).map(m=>{const o=R[m.id]||{},sub=numOrNull(o.sub),tips=numOrNull(o.tips),msg=numOrNull(o.msg),fans=numOrNull(o.fans);
-  const chat=tips==null&&msg==null?null:(tips||0)+(msg||0);return {id:m.id,name:m.name,sub,tips,msg,fans,chat,ratio:chat!=null&&sub?chat/sub:null}})}
+/* ---- chatting ratio (monthly, its own page list) ---- */
+const RKEYS=["name","sub","tips","msg"];
+S.ratio=[];S.ratioAsOf="";S.ratioLoaded=false;S.ratioMonth=ukParts().date.slice(0,7);
+let unRatio=null;
+const ratioClean=r=>({name:r&&r.name!=null?String(r.name):"",sub:numOrNull(r&&r.sub),tips:numOrNull(r&&r.tips),msg:numOrNull(r&&r.msg)});
+function subRatio(){
+  if(!S.db)return;if(unRatio)unRatio();S.ratioLoaded=false;const m=S.ratioMonth;
+  unRatio=S.db.doc("ratio/"+m).onSnapshot(sn=>guard("ratio",()=>{if(m!==S.ratioMonth)return;if(sn.exists)existing.add("ratio/"+m);
+    S.ratio=((sn.exists&&sn.data().rows)||[]).map(ratioClean);S.ratioAsOf=String((sn.exists&&sn.data().asof)||"");S.ratioLoaded=true;if(!S.tEditing){renderRatio();gPaint()}}),()=>{});
+}
+function saveRatio(rows){const m=S.ratioMonth,asof=S.ratioAsOf;S.ratio=rows;if(!S.db)return;queue("ratio",()=>S.db.doc("ratio/"+m).set({month:m,asof,rows:rows.map(r=>({...r}))}))}
+function ratioRows(){return S.ratio.map(o=>{const chat=o.tips==null&&o.msg==null?null:(o.tips||0)+(o.msg||0);return {...o,chat,ratio:chat!=null&&o.sub?chat/o.sub:null}})}
+const rx=x=>x==null?"—":"1:"+x.toFixed(2);
 function renderRatio(){
   const t=$("#ratio-table");if(!t||S.tEditing)return;
-  if((!S.devLoaded||!S.devModelsLoaded)&&S.db){t.innerHTML=`<tbody><tr><td class="empty-state">Loading…</td></tr></tbody>`;$("#ratio-stats").innerHTML="";return}
+  const [y,mo]=S.ratioMonth.split("-").map(Number);$("#rm-label").textContent=MONTHS[mo-1]+" "+y;$("#ratio-add").disabled=S.readOnly;{const ao=$("#ratio-asof");ao.disabled=S.readOnly||(!S.ratioLoaded&&!!S.db);if(document.activeElement!==ao)ao.value=S.ratioAsOf}
+  if(!S.ratioLoaded&&S.db){t.innerHTML=`<tbody><tr><td class="empty-state">Loading…</td></tr></tbody>`;$("#ratio-stats").innerHTML="";return}
   const rows=ratioRows(),sum=k=>rows.reduce((a,r)=>a+(r[k]||0),0),has=k=>rows.some(r=>r[k]!=null);
-  const tSub=sum("sub"),tChat=sum("chat"),agency=tSub?tChat/tSub:null,rated=rows.filter(r=>r.ratio!=null).sort((a,b)=>b.ratio-a.ratio),mx=rated.length?rated[0].ratio:0;
-  const rx=x=>x==null?"—":x.toFixed(2);
+  const tSub=sum("sub"),tChat=sum("chat"),agency=tSub&&has("chat")?tChat/tSub:null,rated=rows.filter(r=>r.ratio!=null).sort((a,b)=>b.ratio-a.ratio),mx=rated.length?rated[0].ratio:0;
+  const nm=r=>esc(r.name.trim()||"Unnamed page");
   $("#ratio-stats").innerHTML=`<div class="stat"><span class="l">Agency chatting ratio</span><span class="v">${rx(agency)}</span><span class="l">${agency!=null?`${money(agency,2)} from chatting per $1 of subscription`:"Enter figures to see it"}</span></div>
-    <div class="stat"><span class="l">Tips + messages</span><span class="v">${has("chat")?money(tChat,0):"—"}</span><span class="l">${has("sub")?"Net subscription "+money(tSub,0):"—"}</span></div>
-    <div class="stat"><span class="l">Highest ratio</span><span class="v good" style="font-size:26px">${rated.length?esc(rated[0].name):"—"}</span><span class="l">${rated.length?rx(rated[0].ratio):"—"}</span></div>
-    <div class="stat"><span class="l">Lowest ratio</span><span class="v bad" style="font-size:26px">${rated.length>1?esc(rated[rated.length-1].name):"—"}</span><span class="l">${rated.length>1?rx(rated[rated.length-1].ratio):"—"}</span></div>`;
-  if(!rows.length){t.innerHTML=`<tbody><tr><td class="empty-state">No pages for ${monName(S.devMonth)} yet. Add them in the <a href="#dev-table">Development Table</a> (Edit models).</td></tr></tbody>`;return}
-  const cell=(r,i,c,v,m)=>`<td class="v${v==null?" need":""}" data-gt="ratio" data-r="${i}" data-c="${c}">${v==null?"":m?money(v):Number(v).toLocaleString("en-GB")}</td>`;
-  t.innerHTML=`<thead><tr><th class="l">Page</th><th>Subscription<small>net</small></th><th>Tips</th><th>Messages</th><th class="hl">Chatting ratio<small>(Tips + Messages) ÷ Subscription</small></th></tr></thead><tbody>${
-    rows.map((r,i)=>`<tr><td class="l nm">${esc(r.name)}</td>${cell(r,i,0,r.sub,1)}${cell(r,i,1,r.tips,1)}${cell(r,i,2,r.msg,1)}<td class="hl" data-gt="ratio" data-r="${i}" data-c="3" title="${r.ratio==null?(r.sub?"Enter tips or messages":"Enter the subscription figure"):money(r.chat)+" ÷ "+money(r.sub)}">${r.ratio==null?"—":`<span class="rbar"><i style="width:${mx?Math.min(100,r.ratio/mx*100):0}%"></i></span>${rx(r.ratio)}`}</td></tr>`).join("")}</tbody>
-    <tfoot><tr><td class="l">All pages</td><td>${has("sub")?money(tSub):""}</td><td>${has("tips")?money(sum("tips")):""}</td><td>${has("msg")?money(sum("msg")):""}</td><td class="hl">${rx(agency)}</td></tr></tfoot>`;
+    <div class="stat"><span class="l">Tips + messages</span><span class="v">${has("chat")?money(tChat,0):"—"}</span><span class="l">${has("sub")?"Subscription "+money(tSub,0):"—"}</span></div>
+    <div class="stat"><span class="l">Highest ratio</span><span class="v good" style="font-size:26px">${rated.length?nm(rated[0]):"—"}</span><span class="l">${rated.length?rx(rated[0].ratio):"—"}</span></div>
+    <div class="stat"><span class="l">Lowest ratio</span><span class="v bad" style="font-size:26px">${rated.length>1?nm(rated[rated.length-1]):"—"}</span><span class="l">${rated.length>1?rx(rated[rated.length-1].ratio):"—"}</span></div>`;
+  if(!rows.length){t.innerHTML=`<tbody><tr><td class="empty-state">No pages for ${MONTHS[mo-1]} ${y} yet. Press “+ Add page” to start${S.readOnly?"":`, or <button class="btn" id="ratio-copy" style="margin-left:6px">Copy page names from last month</button>`}</td></tr></tbody>`;return}
+  const cell=(r,i,c,v)=>`<td class="v${v==null?" need":""}" data-gt="ratio" data-r="${i}" data-c="${c}">${v==null?"":money(v)}</td>`;
+  t.innerHTML=`<thead><tr><th class="l">Page</th><th>Subscription</th><th>Tips</th><th>Messages</th><th class="hl">Chatting ratio<small>(Tips + Messages) ÷ Subscription</small></th><th class="x"></th></tr></thead><tbody>${
+    rows.map((r,i)=>`<tr><td class="l nm${r.name?"":" need"}" data-gt="ratio" data-r="${i}" data-c="0">${esc(r.name)}</td>${cell(r,i,1,r.sub)}${cell(r,i,2,r.tips)}${cell(r,i,3,r.msg)}<td class="hl" data-gt="ratio" data-r="${i}" data-c="4" title="${r.ratio==null?(r.sub?"Enter tips or messages":"Enter the subscription figure"):money(r.chat)+" ÷ "+money(r.sub)}">${r.ratio==null?"—":`<span class="rbar"><i style="width:${mx?Math.min(100,r.ratio/mx*100):0}%"></i></span>${rx(r.ratio)}`}</td><td class="x">${S.readOnly?"":`<button class="mini" data-rdel="${i}" title="Remove page">✕</button>`}</td></tr>`).join("")}</tbody>
+    <tfoot><tr><td class="l">All pages</td><td>${has("sub")?money(tSub):""}</td><td>${has("tips")?money(sum("tips")):""}</td><td>${has("msg")?money(sum("msg")):""}</td><td class="hl">${rx(agency)}</td><td class="x"></td></tr></tfoot>`;
 }
 function RatioAdapter(){
-  const M=devModelsFor(S.devMonth);
-  return {rows:()=>M.length,cols:()=>4,
-    get(r,c){const x=ratioRows()[r];if(!x)return"";if(c===3)return x.ratio==null?"":x.ratio.toFixed(2);const v=x[RKEYS[c]];return v==null?"":String(v)},
-    set(ch){const patch={};let bad=0;
-      ch.forEach(({r,c,v})=>{if(c>2||!M[r])return;const tx=String(v).replace(/[$£€,\s]/g,"");let val=null;if(tx!==""){val=Number(tx);if(isNaN(val)){bad++;return}}(patch[M[r].id]=patch[M[r].id]||{})[RKEYS[c]]=val});
-      if(bad)toast(`Skipped ${bad} value${bad===1?"":"s"} that weren't numbers`);if(Object.keys(patch).length)saveRatio(patch);renderRatio()},
-    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c;if(c>2)return;const cur=this.get(r,c);textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null)this.set([{r,c,v}]);afterEdit("ratio",r,c,dr,dc,renderRatio)})}};
+  return {rows:()=>S.ratio.length,cols:()=>5,
+    get(r,c){const x=ratioRows()[r];if(!x)return"";if(c===4)return x.ratio==null?"":"1:"+x.ratio.toFixed(2);const v=x[RKEYS[c]];return v==null?"":String(v)},
+    set(ch){const rows=S.ratio.map(x=>({...x}));let bad=0,n=0;
+      ch.forEach(({r,c,v})=>{if(c>3)return;v=String(v).trim();let val=v;
+        if(c>0){const tx=v.replace(/[$£€,\s]/g,"");val=null;if(tx!==""){val=Number(tx);if(isNaN(val)){bad++;return}}}
+        while(rows.length<=r){if(v==="")return;rows.push({name:"",sub:null,tips:null,msg:null})}rows[r][RKEYS[c]]=val;n++});
+      if(bad)toast(`Skipped ${bad} value${bad===1?"":"s"} that weren't numbers`);if(n)saveRatio(rows);renderRatio()},
+    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c;if(c>3||S.readOnly)return;const cur=this.get(r,c);textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null)this.set([{r,c,v}]);afterEdit("ratio",r,c,dr,dc,renderRatio)})}};
 }
 $("#ratio-table").addEventListener("dblclick",e=>{const td=e.target.closest('[data-gt="ratio"]');if(td)RatioAdapter().edit(td)});
+$("#ratio-table").addEventListener("click",e=>{
+  if(e.target.closest("#ratio-copy")){if(!S.db||S.readOnly)return;const prev=shiftMonth(S.ratioMonth,-1),m=S.ratioMonth;
+    S.db.doc("ratio/"+prev).get().then(sn=>{if(m!==S.ratioMonth)return;const names=((sn.exists&&sn.data().rows)||[]).map(r=>String(r.name||"").trim()).filter(Boolean);
+      if(!names.length){toast("Last month has no pages to copy");return}saveRatio(names.map(name=>({name,sub:null,tips:null,msg:null})));renderRatio();toast("Page names copied")}).catch(()=>toast("Couldn't load last month"));return}
+  const b=e.target.closest("[data-rdel]");if(!b||S.readOnly)return;
+  if(!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Remove?";setTimeout(()=>{if(b.isConnected){b.classList.remove("armed");b.textContent="✕"}},3000);return}
+  const rows=S.ratio.map(x=>({...x}));rows.splice(+b.dataset.rdel,1);saveRatio(rows);gClear();renderRatio()});
+$("#ratio-add").onclick=()=>{const rows=S.ratio.map(x=>({...x}));rows.push({name:"",sub:null,tips:null,msg:null});saveRatio(rows);renderRatio();const r=rows.length-1;gSet("ratio",{r,c:0});gPaint();const el=gCell("ratio",r,0);if(el)RatioAdapter().edit(el)};
+const rmGo=n=>{S.ratioMonth=shiftMonth(S.ratioMonth,n);S.ratioAsOf="";gClear();subRatio();renderRatio()};
+$("#ratio-asof").addEventListener("change",e=>{const v=e.target.value.trim();if(v===S.ratioAsOf)return;S.ratioAsOf=v;saveRatio(S.ratio.map(x=>({...x})));toast("Date saved")});
+$("#ratio-asof").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();e.target.blur()}});
+$("#rm-prev").onclick=()=>rmGo(-1);$("#rm-next").onclick=()=>rmGo(1);
 
 /* ---- business targets ---- */
 function chatterTargets(C){ // split each page's daily Admin target across the shifts and chatters covering it on today's line up
@@ -2331,7 +2359,7 @@ document.addEventListener("mouseover",e=>{
   const q=gPos(td);if(G.down&&(q.r!==G.down.p.r||q.c!==G.down.p.c))G.down.moved=true;
   G.ranges[G.ranges.length-1].f=q;gPaint();
 });
-const QUICK=new Set(["roster","chk","notes","sales","devbase","devadm","tgt","att"]);const QUICKP=["cr-"]; // tables where one click starts typing
+const QUICK=new Set(["roster","chk","notes","sales","devbase","devadm","tgt","att","ratio"]);const QUICKP=["cr-"]; // tables where one click starts typing
 document.addEventListener("mouseup",()=>{
   G.drag=false;const d=G.down;G.down=null;
   if(!d||d.moved||S.readOnly)return;
@@ -2376,10 +2404,25 @@ document.addEventListener("cut",e=>{
   e.clipboardData.setData("text/plain",gToTSV());e.preventDefault();
   adapter(G.tid).set(gSelectedPositions().map(p=>({...p,v:""})));
 });
+/* pasting a block while a cell is open for typing: close the cell and spread the block over the cells */
+document.addEventListener("paste",e=>{
+  const el=document.activeElement;if(!el||!el.isContentEditable||S.readOnly)return;
+  const td=el.closest("[data-gt]");if(!td||td.dataset.gt==="notes"||!adapter(td.dataset.gt))return;
+  const txt=((e.clipboardData&&e.clipboardData.getData("text/plain"))||"").replace(/\r/g,"").replace(/\n+$/,"");
+  if(!/[\t\n]/.test(txt))return;
+  e.preventDefault();e.stopPropagation();
+  const tid=td.dataset.gt,pos=gPos(td);
+  el.dispatchEvent(new KeyboardEvent("keydown",{key:"Escape",bubbles:true,cancelable:true}));
+  setTimeout(()=>{const a=document.activeElement;if(a&&a.isContentEditable)a.blur();gSet(tid,pos);gPasteText(txt)},0);
+},true);
 document.addEventListener("paste",e=>{
   if(!G.tid||gEditing()||S.readOnly)return;
+  if(!adapter(G.tid))return;
+  const txt=e.clipboardData.getData("text/plain");if(txt==null)return;e.preventDefault();
+  gPasteText(txt);
+});
+function gPasteText(txt){
   const ad=adapter(G.tid);if(!ad)return;
-  let txt=e.clipboardData.getData("text/plain");if(txt==null)return;e.preventDefault();
   txt=txt.replace(/\r/g,"");if(txt.endsWith("\n"))txt=txt.slice(0,-1);
   const M=txt.split("\n").map(l=>l.split("\t"));
   const changes=[];
@@ -2392,7 +2435,7 @@ document.addEventListener("paste",e=>{
   ad.set(changes);
   toast(`Pasted ${changes.length} cell${changes.length===1?"":"s"}`);
   setTimeout(gPaint,50);
-});
+}
 
 /* ---------- data ---------- */
 function renderAll(){renderHome();renderLineup();renderChatters();renderChecklist();renderFans();renderPerf();renderHire();renderAttend();renderDevTable();renderDevReview();renderDevTargets();renderRatio();renderContent();tick();gPaint()}
@@ -2403,7 +2446,7 @@ async function boot(){
   if(!db){S.loaded=S.boardLoaded=S.fanLoaded=S.fanPagesLoaded=S.ckTplLoaded=S.ckLoaded=S.perfLoaded=S.hireLoaded=S.attLoaded=S.devLoaded=S.devModelsLoaded=S.crLoaded=true;DAYS.forEach(d=>S.loadedDays.add(d.k));renderAll();$("#ch-body").innerHTML=`<tr><td colspan="5" class="empty-state">Team data isn't available in this view.</td></tr>`;return}
   S.db=db;
   db.doc("fans/pages").onSnapshot(sn=>guard("fanpages",()=>{S.fanPages=(sn.exists&&sn.data().list)||[];S.fanPagesLoaded=true;if(!S.fEditing){renderFans();gPaint()}}),()=>{});
-  subFans();subSales();subPerf();subHire();subAtt();subDev();
+  subFans();subSales();subPerf();subHire();subAtt();subDev();subRatio();
   db.doc("dev/models").onSnapshot(sn=>guard("devmodels",()=>{S.devModels=(sn.exists&&sn.data().list)||[];S.devNames=Object.assign({},sn.exists&&sn.data().names);S.devModels.forEach(m=>{if(!S.devNames[m.id])S.devNames[m.id]=m.name});S.devModelsLoaded=true;if(!S.tEditing)renderDev()}),()=>{});
   db.doc("content/requests").onSnapshot(sn=>guard("cr",()=>{S.cr=((sn.exists&&sn.data().tables)||[]).map(t=>({id:t.id,page:t.page||"",rows:(t.rows||[]).map(r=>({t:r.t||"",d:r.d||"",done:!!r.done}))}));S.crLoaded=true;if(!S.tEditing){renderContent();gPaint()}}),()=>{});
   db.doc("checklist/template").onSnapshot(sn=>guard("cktpl",()=>{S.ckItems=(sn.exists&&sn.data().items)||[];S.ckTplLoaded=true;if(!S.kEditing){renderChecklist();gPaint()}}),()=>{});
