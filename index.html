@@ -439,6 +439,12 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
 .perf{min-width:980px}.hire{min-width:760px}
 .perf th,.hire th{position:sticky;top:0;z-index:1;background:#3E4A3F;color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:9px 10px;text-align:center;white-space:nowrap}
 .hire th{background:#2F5D46}
+.hire td.tg{font-family:var(--mono);font-size:12px;min-width:90px}
+.hire th,.hire td{padding-left:7px;padding-right:7px}.hire td:nth-child(2){white-space:nowrap}.hire .pill-sel{padding-left:9px;padding-right:20px;font-size:11.5px}.hire th{font-size:11px;letter-spacing:.02em}
+.pill-sel.v-flexible{background-color:var(--accent-soft);color:var(--ink)}
+.pill-sel.v-morninguk{background-color:var(--warn-soft);color:var(--warn)}
+.pill-sel.v-afternoonuk{background-color:var(--gm-bg);color:var(--gm)}
+.pill-sel.v-eveninguk{background-color:var(--sheet-head);color:#fff}
 .perf td,.hire td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:6px 10px;text-align:center;height:34px;background:var(--surface)}
 .perf td.emp,.hire td.nm{font-weight:600}
 .perf td.emp{text-align:left;white-space:nowrap}
@@ -580,6 +586,22 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
 .att-dash .n-bad{color:var(--bad);font-weight:700}
 
 /* chatting ratio */
+.callout{margin:0 0 14px;padding:12px 16px;border-radius:12px;background:var(--warn-soft);color:var(--ink);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent);font-size:13px;line-height:1.5}
+.callout b{color:var(--warn)}
+.ratio-top{display:flex;gap:14px;align-items:stretch;flex-wrap:wrap;margin:0 0 16px}
+.ratio-top .asof{margin:0;align-self:stretch}
+.rg{flex:1 1 420px;display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:0}
+.rg .grp{border-radius:12px;padding:10px 14px;border:1px solid var(--line);background:var(--surface);min-width:0}
+.rg .grp h3{margin:0 0 7px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:7px}
+.rg .grp h3 i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.rg .red h3{color:var(--bad)}.rg .red h3 i{background:var(--bad)}.rg .red{background:var(--bad-soft)}
+.rg .green h3{color:var(--good)}.rg .green h3 i{background:var(--good)}.rg .green{background:var(--good-soft)}
+.rg .chips{display:flex;flex-wrap:wrap;gap:5px}
+.rg .chip{background:var(--surface);border-radius:99px;padding:3px 10px;font-size:12px;font-weight:600;white-space:nowrap}
+.rg .chip small{font-weight:500;color:var(--ink-3);margin-left:5px}
+.rg .none{font-size:12px;color:var(--ink-3)}
+.ratio td.hl.r-red{color:var(--bad)}.ratio td.hl.r-green{color:var(--good)}
+@media (max-width:640px){.rg{grid-template-columns:1fr}}
 .asof{display:inline-flex;align-items:center;gap:10px;margin:0 0 16px;padding:8px 8px 8px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;font-size:13px;max-width:100%}
 .asof span{font-weight:600;letter-spacing:.02em;white-space:nowrap}
 .asof input{border:1px solid transparent;background:var(--surface-2);border-radius:8px;padding:7px 11px;font:inherit;font-weight:600;color:var(--ink);min-width:0;width:230px}
@@ -850,7 +872,11 @@ button,a,select,[data-gt],.tick{touch-action:manipulation}
           <button class="btn primary" id="ratio-add">+ Add page</button>
         </div>
       </div>
-      <label class="asof"><span>As of the Date:</span><input id="ratio-asof" type="text" placeholder="e.g. 7 October 2026" maxlength="60" autocomplete="off"></label>
+      <div class="callout"><b>Please note:</b> not all pages qualify for the chatting ratio check, as some pages are getting FTL (free trial links). Only add the pages that qualify.</div>
+      <div class="ratio-top">
+        <label class="asof"><span>As of the Date:</span><input id="ratio-asof" type="text" placeholder="e.g. 7 October 2026" maxlength="60" autocomplete="off"></label>
+        <div class="rg" id="ratio-rg"></div>
+      </div>
       <div class="stats" id="ratio-stats"></div>
       <div class="tbl-wrap"><table class="ratio" id="ratio-table"></table></div>
       <p class="note">Chatting Ratio = (Tips + Messages) ÷ Subscription, shown as 1:N. For every $1 of subscription, the chatters bring in $N. This table is its own list: type the page names and figures here, or paste a block from your sheet. Each month has its own table.</p>
@@ -1705,7 +1731,7 @@ const pwGo=w=>{S.perfWeek=w;gClear();subPerf();renderPerf()};
 $("#pw-prev").onclick=()=>pwGo(addDays(S.perfWeek,-7));$("#pw-next").onclick=()=>pwGo(addDays(S.perfWeek,7));$("#pw-this").onclick=()=>pwGo(mondayOfISO(ukParts().date));
 
 /* ---- hiring & firing (monthly) ---- */
-const HKEYS=["name","date","a","i","o","out"];
+const HKEYS=["name","date","a","i","o","out","tg","shift"];const SHIFT_OPTS=["Flexible","Morning UK","Afternoon UK","Evening UK"];
 let unHire=null;
 function subHire(){
   if(!S.db)return;if(unHire)unHire();S.hireLoaded=false;const m=S.hireMonth;
@@ -1731,25 +1757,27 @@ function renderHire(){
     <div class="stat"><span class="l">Failed / no show</span><span class="v bad">${c("Failed")+c("No Show")}</span><span class="l">${c("Failed")} failed · ${c("No Show")} no show</span></div>
     <div class="stat"><span class="l">Terminated</span><span class="v">${c("Terminated")}</span><span class="l">existing chatters let go</span></div>`;
   const sel=(r,k,opts,val,locked)=>{const v=pick(opts,val)||(locked?val:"");return `<select class="pill-sel ${vcls(v==="N/A"?"na":v)}${locked?" locked":""}" data-hrow="${r}" data-hkey="${k}"${locked||S.readOnly?" disabled":""} title="${locked?"Set automatically by the rules":""}"><option value="">—</option>${opts.map(o=>`<option${o===v?" selected":""}>${o}</option>`).join("")}</select>`};
-  let h=`<thead><tr><th>Applicant / Chatter</th><th>Date</th><th>Assessment</th><th>Interview</th><th>Onboarding</th><th>Outcome</th><th class="x"></th></tr></thead><tbody>`;
+  let h=`<thead><tr><th>Applicant / Chatter</th><th>Date</th><th>Assessment</th><th>Interview</th><th>Onboarding</th><th>Outcome</th><th>TG</th><th>Best Shift</th><th class="x"></th></tr></thead><tbody>`;
   h+=effs.map(({e,locked},r)=>`<tr><td class="nm" data-gt="hire" data-r="${r}" data-c="0">${esc(e.name)}</td><td data-gt="hire" data-r="${r}" data-c="1">${esc(e.date)}</td>
     ${["a","i","o"].map((k,j)=>`<td data-gt="hire" data-r="${r}" data-c="${j+2}">${sel(r,k,STEP_OPTS,e[k],locked.has(k))}</td>`).join("")}
     <td data-gt="hire" data-r="${r}" data-c="5">${sel(r,"out",OUT_OPTS,e.out,locked.has("out"))}</td>
+    <td class="tg" data-gt="hire" data-r="${r}" data-c="6">${esc(e.tg||"")}</td>
+    <td data-gt="hire" data-r="${r}" data-c="7">${sel(r,"shift",SHIFT_OPTS,e.shift,false)}</td>
     <td class="x">${S.readOnly?"":`<button class="mini" data-hdel="${r}" title="Remove row">✕</button>`}</td></tr>`).join("");
-  if(!rows.length)h+=`<tr><td colspan="7" class="empty-state">No applicants for ${MONTHS[mo-1]} yet. Click <b>+ Add applicant</b>, or select a cell and paste from your sheet.</td></tr>`;
+  if(!rows.length)h+=`<tr><td colspan="9" class="empty-state">No applicants for ${MONTHS[mo-1]} yet. Click <b>+ Add applicant</b>, or select a cell and paste from your sheet.</td></tr>`;
   t.innerHTML=h+"</tbody>";
 }
 function HireAdapter(){
-  return {rows:()=>S.hire.length,cols:()=>6,
+  return {rows:()=>S.hire.length,cols:()=>8,
     get(r,c){const row=S.hire[r];if(!row)return"";return hireEff(row).e[HKEYS[c]]||""},
     set(ch){const rows=S.hire.map(x=>({...x}));let n=0,bad=0;
-      ch.forEach(({r,c,v})=>{if(c>5)return;v=String(v).trim();const k=HKEYS[c];
-        let val=v;if(c>=2&&v){val=pick(c===5?OUT_OPTS:STEP_OPTS,v);if(!val){bad++;return}}
+      ch.forEach(({r,c,v})=>{if(c>7)return;v=String(v).trim();const k=HKEYS[c],isSel=c>=2&&c!==6;
+        let val=v;if(isSel&&v){val=pick(c===7?SHIFT_OPTS:c===5?OUT_OPTS:STEP_OPTS,v);if(!val){bad++;return}}
         while(rows.length<=r){if(!v)return;rows.push(Object.fromEntries(HKEYS.map(x=>[x,""])))}
-        if(c>=2&&hireEff(rows[r]).locked.has(k))return;rows[r][k]=val;n++});
+        if(hireEff(rows[r]).locked.has(k))return;rows[r][k]=val;n++});
       if(bad)toast(`Skipped ${bad} value${bad===1?"":"s"} that aren't dropdown options`);
       if(n)saveHire(rows);renderHire()},
-    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c;if(c>=2){const s=el.querySelector("select:not([disabled])");if(s){s.focus();try{s.showPicker()}catch(e){}}return}
+    edit(el,i){const r=+el.dataset.r,c=+el.dataset.c;if(c>=2&&c!==6){const s=el.querySelector("select:not([disabled])");if(s){s.focus();try{s.showPicker()}catch(e){}}return}
       const k=HKEYS[c],cur=S.hire[r]?.[k]||"";
       textEdit(el,cur,i,(v,dr,dc)=>{if(v!=null&&S.hire[r]){const rows=S.hire.map(x=>({...x}));rows[r][k]=v;saveHire(rows)}afterEdit("hire",r,c,dr,dc,renderHire)})}};
 }
@@ -2084,7 +2112,7 @@ const rx=x=>x==null?"—":"1:"+x.toFixed(2);
 function renderRatio(){
   const t=$("#ratio-table");if(!t||S.tEditing)return;
   const [y,mo]=S.ratioMonth.split("-").map(Number);$("#rm-label").textContent=MONTHS[mo-1]+" "+y;$("#ratio-add").disabled=S.readOnly;{const ao=$("#ratio-asof");ao.disabled=S.readOnly||(!S.ratioLoaded&&!!S.db);if(document.activeElement!==ao)ao.value=S.ratioAsOf}
-  if(!S.ratioLoaded&&S.db){t.innerHTML=`<tbody><tr><td class="empty-state">Loading…</td></tr></tbody>`;$("#ratio-stats").innerHTML="";return}
+  if(!S.ratioLoaded&&S.db){t.innerHTML=`<tbody><tr><td class="empty-state">Loading…</td></tr></tbody>`;$("#ratio-stats").innerHTML="";$("#ratio-rg").innerHTML="";return}
   const rows=ratioRows(),sum=k=>rows.reduce((a,r)=>a+(r[k]||0),0),has=k=>rows.some(r=>r[k]!=null);
   const tSub=sum("sub"),tChat=sum("chat"),agency=tSub&&has("chat")?tChat/tSub:null,rated=rows.filter(r=>r.ratio!=null).sort((a,b)=>b.ratio-a.ratio),mx=rated.length?rated[0].ratio:0;
   const nm=r=>esc(r.name.trim()||"Unnamed page");
@@ -2092,10 +2120,14 @@ function renderRatio(){
     <div class="stat"><span class="l">Tips + messages</span><span class="v">${has("chat")?money(tChat,0):"—"}</span><span class="l">${has("sub")?"Subscription "+money(tSub,0):"—"}</span></div>
     <div class="stat"><span class="l">Highest ratio</span><span class="v good" style="font-size:26px">${rated.length?nm(rated[0]):"—"}</span><span class="l">${rated.length?rx(rated[0].ratio):"—"}</span></div>
     <div class="stat"><span class="l">Lowest ratio</span><span class="v bad" style="font-size:26px">${rated.length>1?nm(rated[rated.length-1]):"—"}</span><span class="l">${rated.length>1?rx(rated[rated.length-1].ratio):"—"}</span></div>`;
+  {const R5=x=>Math.round(x*100)/100>=5,red=rated.filter(r=>!R5(r.ratio)).sort((a,b)=>a.ratio-b.ratio),grn=rated.filter(r=>R5(r.ratio));
+   const chips=(L,emp)=>L.length?`<div class="chips">${L.map(r=>`<span class="chip">${nm(r)}<small>${rx(r.ratio)}</small></span>`).join("")}</div>`:`<div class="none">${emp}</div>`;
+   $("#ratio-rg").innerHTML=`<div class="grp red"><h3><i></i>Red · below 1:5 <span style="margin-left:auto">${red.length}</span></h3>${chips(red,"No pages below 1:5")}</div>
+     <div class="grp green"><h3><i></i>Green · 1:5 and above <span style="margin-left:auto">${grn.length}</span></h3>${chips(grn,"No pages at 1:5 yet")}</div>`}
   if(!rows.length){t.innerHTML=`<tbody><tr><td class="empty-state">No pages for ${MONTHS[mo-1]} ${y} yet. Press “+ Add page” to start${S.readOnly?"":`, or <button class="btn" id="ratio-copy" style="margin-left:6px">Copy page names from last month</button>`}</td></tr></tbody>`;return}
   const cell=(r,i,c,v)=>`<td class="v${v==null?" need":""}" data-gt="ratio" data-r="${i}" data-c="${c}">${v==null?"":money(v)}</td>`;
   t.innerHTML=`<thead><tr><th class="l">Page</th><th>Subscription</th><th>Tips</th><th>Messages</th><th class="hl">Chatting ratio<small>(Tips + Messages) ÷ Subscription</small></th><th class="x"></th></tr></thead><tbody>${
-    rows.map((r,i)=>`<tr><td class="l nm${r.name?"":" need"}" data-gt="ratio" data-r="${i}" data-c="0">${esc(r.name)}</td>${cell(r,i,1,r.sub)}${cell(r,i,2,r.tips)}${cell(r,i,3,r.msg)}<td class="hl" data-gt="ratio" data-r="${i}" data-c="4" title="${r.ratio==null?(r.sub?"Enter tips or messages":"Enter the subscription figure"):money(r.chat)+" ÷ "+money(r.sub)}">${r.ratio==null?"—":`<span class="rbar"><i style="width:${mx?Math.min(100,r.ratio/mx*100):0}%"></i></span>${rx(r.ratio)}`}</td><td class="x">${S.readOnly?"":`<button class="mini" data-rdel="${i}" title="Remove page">✕</button>`}</td></tr>`).join("")}</tbody>
+    rows.map((r,i)=>`<tr><td class="l nm${r.name?"":" need"}" data-gt="ratio" data-r="${i}" data-c="0">${esc(r.name)}</td>${cell(r,i,1,r.sub)}${cell(r,i,2,r.tips)}${cell(r,i,3,r.msg)}<td class="hl${r.ratio==null?"":Math.round(r.ratio*100)/100>=5?" r-green":" r-red"}" data-gt="ratio" data-r="${i}" data-c="4" title="${r.ratio==null?(r.sub?"Enter tips or messages":"Enter the subscription figure"):money(r.chat)+" ÷ "+money(r.sub)}">${r.ratio==null?"—":`<span class="rbar"><i style="width:${mx?Math.min(100,r.ratio/mx*100):0}%"></i></span>${rx(r.ratio)}`}</td><td class="x">${S.readOnly?"":`<button class="mini" data-rdel="${i}" title="Remove page">✕</button>`}</td></tr>`).join("")}</tbody>
     <tfoot><tr><td class="l">All pages</td><td>${has("sub")?money(tSub):""}</td><td>${has("tips")?money(sum("tips")):""}</td><td>${has("msg")?money(sum("msg")):""}</td><td class="hl">${rx(agency)}</td><td class="x"></td></tr></tfoot>`;
 }
 function RatioAdapter(){
